@@ -37,3 +37,9 @@
 - Qt permettra d'avoir facilement des boutons en compagnie mais avec allegro, dessiner la carte et les chemins sera bien plus simple
 - pour l'instant je vais dire allegro
 
+
+## pour le code
+ - une classe map, avec de quoi générer la map
+ - une classe pour gérer les chemins , qui gere aussi l'algo génétique?
+ - une classe pour afficher?
+ 
