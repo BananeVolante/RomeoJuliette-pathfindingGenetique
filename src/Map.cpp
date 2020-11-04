@@ -60,7 +60,7 @@ void Map::printAllForms()
 {
     for (auto &&i : obstacleList)
     {
-        printf("c \n");
+        std::cout << *i << std::endl;
     }
     
 }
