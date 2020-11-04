@@ -8,6 +8,18 @@ GeometricForm::GeometricForm(point centerP) : center(centerP)
 }
 
 GeometricForm::~GeometricForm() = default;
+
+std::ostream& GeometricForm::handleCoutPrint(std::ostream& os) const
+{
+    os << "center : (" << center.x << "," << center.y <<") ";
+    return os;
+}
+
+//make the << operator call handleCoutPrint, since i can't use polymorphism and everything with this
+std::ostream& operator<<(std::ostream& os, const GeometricForm& form)
+{
+    return form.handleCoutPrint(os); 
+}
 //Circle
 
 Circle::Circle(point centerP, float radiusP) : GeometricForm(centerP), radius(radiusP)
@@ -18,6 +30,15 @@ bool Circle::isInHitbox(point point)
 {
     return ( SQUARE(center.x - point.x)+ SQUARE(center.y - point.y) ) <= SQUARE(radius); 
 }
+
+
+std::ostream& Circle::handleCoutPrint(std::ostream& os) const
+{
+    GeometricForm::handleCoutPrint(os) <<" radius : " << radius;
+
+    return os;
+}
+
 
 //Rectangle
 
@@ -44,9 +65,26 @@ bool Rectangle::isInHitbox(point point)
 
 }
 
-//Line
+std::ostream& Rectangle::handleCoutPrint(std::ostream& os) const
+{
+    GeometricForm::handleCoutPrint(os) <<" width : " << width << " height : " << height;
 
-Line::Line(point centerP, float size) : Rectangle(centerP, WIDTH,size)
+    return os;
+}
+
+
+//Line
+    //the 1.01
+    //must be at least as wide as the path's elementary element
+    //later, must be directly fixed using a constant somewhere else
+Line::Line(point centerP, float size) : Rectangle(centerP, 1.01,size)
 {
 
+}
+
+std::ostream& Line::handleCoutPrint(std::ostream& os) const
+{
+    GeometricForm::handleCoutPrint(os) <<" size : " << height;
+
+    return os;
 }
