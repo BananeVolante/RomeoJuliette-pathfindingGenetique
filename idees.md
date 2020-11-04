@@ -40,6 +40,7 @@
 
 ## pour le code
  - une classe map, avec de quoi générer la map
+ - du coup une classe d'objet géométrique
  - une classe pour gérer les chemins , qui gere aussi l'algo génétique?
  - une classe pour afficher?
  
