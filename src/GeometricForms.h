@@ -20,6 +20,9 @@ public:
     GeometricForm(point center);
     virtual ~GeometricForm();
     virtual bool isInHitbox(point point) =0 ;
+    point getCenter();
+
+
     friend std::ostream& operator<<(std::ostream& os, const GeometricForm& form);
 };
 
@@ -51,8 +54,7 @@ class Line : public Rectangle
 protected:
 //for now i'll only add vertical lines
     //angle
-    //must be at least as wide as the path's elementary element
-    //later, must be directly fixed using a constant somewhere else
+
     std::ostream& handleCoutPrint(std::ostream& os) const;
 public:
     Line(point center, float size);

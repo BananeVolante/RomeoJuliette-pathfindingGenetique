@@ -1,5 +1,6 @@
 #include "GeometricForms.h"
 #include <math.h>
+#include <stdexcept>
 
 
 //GeometricForm
@@ -20,11 +21,18 @@ std::ostream& operator<<(std::ostream& os, const GeometricForm& form)
 {
     return form.handleCoutPrint(os); 
 }
+
+point GeometricForm::getCenter()
+{
+    return center;
+}
+
 //Circle
 
 Circle::Circle(point centerP, float radiusP) : GeometricForm(centerP), radius(radiusP)
 {
-    
+    if(radiusP<=0)
+        throw new std::invalid_argument("radius must be >= 0");
 }
 bool Circle::isInHitbox(point point)
 {
@@ -44,7 +52,8 @@ std::ostream& Circle::handleCoutPrint(std::ostream& os) const
 
 Rectangle::Rectangle(point centerP, float widthP, float heightP) : GeometricForm(centerP), width(widthP), height(heightP)
 {
-
+    if(widthP <= 0 || heightP <= 0)
+        throw new std::invalid_argument("width and height must be >0");
 }
 
 bool Rectangle::isInHitbox(point point)
@@ -59,9 +68,10 @@ bool Rectangle::isInHitbox(point point)
     i found a lot of other equations but this one does not have arctans, sinuses or
     other things like that, so i think that it'll be easy to compute
     */
+
     
-    return abs(center.x/width + center.y/height) 
-            + abs(center.x/width - center.y/height) <=1;
+    return abs((point.x-center.x)/width + (point.y-center.y)/height) 
+            + abs((point.x-center.x)/width - (point.y-center.y)/height) <=1;
 
 }
 
