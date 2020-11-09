@@ -1,8 +1,11 @@
 #include "Map.h"
 
 #include "stdio.h"
-Map::Map()
+Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height)
 {
+    //if i want the bottom left corner's coordinates to be 0,0, the rectangle's
+    //center must have these coordinates
+
     obstacleList = std::vector<GeometricForm*>();
 }
 
@@ -15,8 +18,12 @@ Map::~Map()
     
 }
 
+// obstacles does not have to be completely inside the map, but their center
+//must be in the map
 void Map::addForm(GeometricForm* form) 
 {
+    if(!mapHitbox.isInHitbox(form->getCenter()))
+        throw new std::invalid_argument("The forms' center must be inside the map");
     obstacleList.push_back(form);
 }
 

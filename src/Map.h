@@ -1,12 +1,17 @@
 #include <vector>
 #include "GeometricForms.h"
+
 class Map
 {
 private:
     std::vector<GeometricForm*> obstacleList;
     void addForm(GeometricForm* form);
+
+    //used to modelize the map's hitbox
+    // the left bottom corner have the 0,0 coordinates
+    Rectangle mapHitbox;
 public:
-    Map();
+    Map(float width, float height);
     ~Map();
     void addCircle(point center, float radius);
     void addRectangle(point center, float width, float height);
