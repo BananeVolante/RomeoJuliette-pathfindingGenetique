@@ -71,3 +71,8 @@ void Map::printAllForms()
     }
     
 }
+
+std::vector<GeometricForm*> Map::getList()
+{
+    return obstacleList;
+}

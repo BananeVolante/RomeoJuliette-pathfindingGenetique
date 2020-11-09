@@ -1,3 +1,8 @@
+#ifndef Map_HEADER
+#define Map_HEADER
+
+
+
 #include <vector>
 #include "GeometricForms.h"
 
@@ -20,9 +25,14 @@ public:
     void addRectangle(float x, float y, float width, float height);
     void addLine(float x, float y, float size);
 
+
+    const float lineWidth = 1.01;
     
 
     //DBG
     void printAllForms();
+    std::vector<GeometricForm*> getList();
 };
 
+
+#endif
