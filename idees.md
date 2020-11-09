@@ -1,9 +1,9 @@
-#infos initiales
+# infos initiales
 - fait en CPP, car j'aime bien ca
 - je fait ca seul
 
 
-#Idees projet POO
+# Idees projet POO
 - pour trouver le chemin, j'utilise un algo génétique
 - vu que sur le sujet, des cercles sont dessinés comme obstacles, je pense qu'un système de case n'est pas adapté, il faut donc utiliser des hitbox "géométriques" -> moins opti par contre(enfin, je vois un moyen d'opti mais je suis pas sûr de le faire)
 
@@ -38,9 +38,24 @@
 - allegro, c'est cool, mais c'est du c, donc je pense que je doit voir ailleurs, je suis pas sûr que ce soit accepté par le prof
 - on va dire sfml, j'ai entendu du bien de ca
 
+## SFML
+   - il me faut je pense, une fonction sur une classe, (sur map?) chargée de transformer les coordonées du programme en coordonées de la fenetre, je verrais ca aprés
+   - bah, au final, une classe faisant interface entre mon code et sfml semble pas mal. Elle aurait pourra
+      - récuperer la liste des obstacles avant la boucle d'affichage pour cacher les shapes de sfml
+      - prendre a chaque boucles les chemins pour les afficher
+      - transformer les coordonées programme en coordonées fenetre
+      - J'ai envie de l'appeller SFMLDrawer, avec drawer qui signifie dessinateur, mais aussi tiroir, parce que il y a plein de trucs dedans et je sais pas où les mettre sinon
+
+## SFMLDrawer 
+   - j'ai rencontré un problème : comment déterminer le type des éléments dans ma liste d'obstacle : 
+      - utiliser des fonctions type typeof, rajouter un .getType a GeometricObject : c'est moche
+      - Au lieu de maintenir 1 liste d'obstacles, maintenir 1 liste de rectangle, 1 de cercle.... : c'est moche
+      - ne pas remplir la liste d'obstacle directement, mais faire appel a SFMLDrawer qui remplira sa liste de shape et fera appel a Map : c'est pas fou mais j'ai choisi ca
+
+
 
 ## pour le code
- - une classe map, avec de quoi générer la map
+ - une classe map, avec de quoi générer la map + pt de départ et d'arrivée
  - du coup une classe d'objet géométrique
  - une classe pour gérer les chemins , qui gere aussi l'algo génétique? 
  - une classe pour afficher? -> je m'en occupe
