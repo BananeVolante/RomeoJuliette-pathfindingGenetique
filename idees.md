@@ -35,12 +35,13 @@
 - je connais (et maitrise un peu) 3 trucs qui peuvent faire une interface graphique en c++, allegro, Qt, et unreal engine.
 - utiliser unreal engine est probablement pas trés sage car il va falloir faire plus que juste coller un programme console dessus
 - Qt permettra d'avoir facilement des boutons en compagnie mais avec allegro, dessiner la carte et les chemins sera bien plus simple
-- pour l'instant je vais dire allegro
+- allegro, c'est cool, mais c'est du c, donc je pense que je doit voir ailleurs, je suis pas sûr que ce soit accepté par le prof
+- on va dire sfml, j'ai entendu du bien de ca
 
 
 ## pour le code
  - une classe map, avec de quoi générer la map
  - du coup une classe d'objet géométrique
- - une classe pour gérer les chemins , qui gere aussi l'algo génétique?
- - une classe pour afficher?
+ - une classe pour gérer les chemins , qui gere aussi l'algo génétique? 
+ - une classe pour afficher? -> je m'en occupe
  
