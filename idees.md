@@ -51,6 +51,8 @@
       - utiliser des fonctions type typeof, rajouter un .getType a GeometricObject : c'est moche
       - Au lieu de maintenir 1 liste d'obstacles, maintenir 1 liste de rectangle, 1 de cercle.... : c'est moche
       - ne pas remplir la liste d'obstacle directement, mais faire appel a SFMLDrawer qui remplira sa liste de shape et fera appel a Map : c'est pas fou mais j'ai choisi ca
+      - ca m'a posé un autre problème : j'avais l'intention de générer une map aléatoire grâce a la classe map, or faire ca m'empeche de le faire, c'est SFMLDrawer qui doit s'en occuper, ca me dérange mais ca reste mieux que les autres solutions, je laisse non implémenté pour l'instant
+
 
 
 
