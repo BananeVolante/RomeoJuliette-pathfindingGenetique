@@ -1,5 +1,4 @@
 #include "SFMLDrawer.h"
-#include <typeinfo>
 
 SFMLDrawer::SFMLDrawer(Map mapP) : map(mapP)
 {
@@ -19,6 +18,8 @@ SFMLDrawer::~SFMLDrawer()
 void SFMLDrawer::addCircle(point center, float radius)
 {
     sf::CircleShape* shape = new sf::CircleShape(radius);
+    //base origin is the top left corner by default, i have to change it to its center
+    shape->setOrigin(radius, radius);
     shape->setPosition(center.x, center.y);
     shape->setFillColor(DEFAULT_COLOR);
     cachedObstacles.push_back(shape);
@@ -28,6 +29,8 @@ void SFMLDrawer::addCircle(point center, float radius)
 void SFMLDrawer::addRectangle(point center, float width, float height)
 {
     sf::RectangleShape* shape = new sf::RectangleShape(sf::Vector2f(width, height));
+    //base origin is the top left corner by default, i have to change it to its center
+    shape->setOrigin(width/2, height/2);
     shape->setPosition(center.x, center.y);
     shape->setFillColor(DEFAULT_COLOR);
     cachedObstacles.push_back(shape);
@@ -46,4 +49,12 @@ void SFMLDrawer::drawAll(sf::RenderWindow &window)
         window.draw(*i);
     }
     
+}
+
+
+
+//TODO ---- IMPLEMENT
+void SFMLDrawer::addRandomObstacles(int n)
+{
+
 }
