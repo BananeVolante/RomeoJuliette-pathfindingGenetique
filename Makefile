@@ -4,7 +4,10 @@ SRCPATH := src
 OBJPATH := objectFiles
 
 
-all: main
+all: createOBJDir main
+
+createOBJDir: 
+	mkdir -p $(OBJPATH)
 
 main: GeometricForms.o Map.o main.o SFMLDrawer.o
 	g++ $(OBJPATH)/GeometricForms.o $(OBJPATH)/Map.o $(OBJPATH)/main.o $(OBJPATH)/SFMLDrawer.o -o program $(SFML_LIBS)
