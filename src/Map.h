@@ -25,8 +25,12 @@ public:
     void addRectangle(float x, float y, float width, float height);
     void addLine(float x, float y, float size);
 
+    float getDistance(point p);
+
 
     const float lineWidth = 1.01;
+    const point start;
+    const point end;
     
 
     //DBG

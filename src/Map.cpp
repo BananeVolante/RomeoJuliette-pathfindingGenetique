@@ -1,7 +1,10 @@
 #include "Map.h"
 
-#include "stdio.h"
-Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height)
+#include <stdio.h>
+#include <math.h>
+
+Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height),
+ start(point{0,0}), end(point{width, height})
 {
     //if i want the bottom left corner's coordinates to be 0,0, the rectangle's
     //center must have these coordinates
@@ -62,6 +65,14 @@ void Map::addLine(float x, float y, float size)
     center.x = x; center.y=y;
     addForm(new Line(center, size));
 }
+
+
+float Map::getDistance(point p)
+{
+    return sqrtf(SQUARE(p.x - end.x) + SQUARE(p.y-end.y));
+}
+
+
 
 void Map::printAllForms()
 {
