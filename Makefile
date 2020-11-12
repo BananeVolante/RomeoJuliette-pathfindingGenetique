@@ -1,4 +1,4 @@
-FLAGS :=-Wall -g
+FLAGS :=-Wall -g -Wextra
 SFML_LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 SRCPATH := src
 OBJPATH := objectFiles
@@ -9,8 +9,8 @@ all: createOBJDir main
 createOBJDir: 
 	mkdir -p $(OBJPATH)
 
-main: GeometricForms.o Map.o main.o SFMLDrawer.o
-	g++ $(OBJPATH)/GeometricForms.o $(OBJPATH)/Map.o $(OBJPATH)/main.o $(OBJPATH)/SFMLDrawer.o -o program $(SFML_LIBS)
+main: GeometricForms.o Map.o main.o SFMLDrawer.o PathManager.o
+	g++ $(OBJPATH)/GeometricForms.o $(OBJPATH)/Map.o $(OBJPATH)/main.o $(OBJPATH)/SFMLDrawer.o $(OBJPATH)/PathManager.o -o program $(SFML_LIBS)
 
 GeometricForms.o: $(SRCPATH)/GeometricForms.cpp $(SRCPATH)/GeometricForms.h
 	g++ -c $(FLAGS) $(SRCPATH)/GeometricForms.cpp -o $(OBJPATH)/$@
@@ -23,6 +23,9 @@ main.o: $(SRCPATH)/main.cpp
 
 SFMLDrawer.o: $(SRCPATH)/SFMLDrawer.cpp $(SRCPATH)/SFMLDrawer.h
 	g++ -c $(FLAGS) $(SRCPATH)/SFMLDrawer.cpp -o $(OBJPATH)/$@
+
+PathManager.o: $(SRCPATH)/PathManager.cpp $(SRCPATH)/PathManager.h
+	g++ -c $(FLAGS) $(SRCPATH)/PathManager.cpp -o $(OBJPATH)/$@
 
 clean:
 	rm -f $(OBJPATH)/*
