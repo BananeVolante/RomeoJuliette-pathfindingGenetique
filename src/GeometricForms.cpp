@@ -70,8 +70,8 @@ bool Rectangle::isInHitbox(point point)
     */
 
     
-    return abs((point.x-center.x)/width + (point.y-center.y)/height) 
-            + abs((point.x-center.x)/width - (point.y-center.y)/height) <=1;
+    return abs((point.x-center.x)/(width/2) + (point.y-center.y)/(height/2)) 
+            + abs((point.x-center.x)/(width/2) - (point.y-center.y)/(height/2)) <=2;
 
 }
 

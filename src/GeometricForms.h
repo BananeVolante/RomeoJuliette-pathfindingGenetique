@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define SQUARE(a) (a*a)
+#define SQUARE(a) ((a)*(a))
 
 typedef struct point
 {
