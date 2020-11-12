@@ -20,6 +20,8 @@ public:
 private:
 
 
+    
+
     // the distance (in x, y or both) of the elementary movement
     float baseElement;
 
@@ -27,10 +29,21 @@ private:
 
     //vector of arrays
     std::vector<point*> dnaList;
-    static point evaluateEndPoint(point* path);
+    //can't e static since the pathManager stores the path length
+    point evaluateEndPoint(point* path);
+
+    //here to keep old id after sorting
+    struct scoreWithId
+    {
+        float score;
+        int id;
+    };
+    static bool scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs);
+    
 
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distrib;
+    std::uniform_int_distribution<int> directionDistrib;
+    std::uniform_real_distribution<float> scoreModulatorDistrib;
 
 
 public:
@@ -40,12 +53,16 @@ public:
 
     //Must be called after adding obstacles
     void fillRandomPaths();
+    void orderByScoreRandomed();
+
+
+
     std::vector<point*> getDnaList();
 
 
 
     //DBG
-    //DO NOT USE WITH A USABLE PATHS
+    //DO NOT USE WITH A BIG PATHS
     void printAllPaths();
 };
 #endif

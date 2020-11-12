@@ -1,8 +1,9 @@
 #include "PathManager.h"
-
+#include <algorithm>
 
 PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP)
- : pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), map(mapP), distrib(1,5)
+ : pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), map(mapP), directionDistrib(1,5), 
+ scoreModulatorDistrib(0.9,1.1)
 {
 }
 
@@ -13,6 +14,18 @@ PathManager::~PathManager()
         free(i);
     }
     
+}
+
+
+point PathManager::evaluateEndPoint(point* path)
+{
+    point end{0,0};
+    for (size_t i = 0; i < pathLen; i++)
+    {
+        end.x += path[i].x;
+        end.y += path[i].y;
+    }
+    return end;
 }
 
 void PathManager::fillRandomPaths()
@@ -29,7 +42,7 @@ void PathManager::fillRandomPaths()
         {
             do
             {
-                int roll = distrib(generator);
+                int roll = directionDistrib(generator);
                 switch (roll)
                 {
                 case 1:
@@ -49,7 +62,7 @@ void PathManager::fillRandomPaths()
                     break;
 
                 }
-                
+
                 tmpPos.x = currentPos.x + currentPath[j].x;
                 tmpPos.y = currentPos.y + currentPath[j].y;
             } while (map.isInObstacle(tmpPos));
@@ -61,12 +74,42 @@ void PathManager::fillRandomPaths()
     
 }
 
+bool PathManager::scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs)
+{
+    return lhs.score>rhs.score;
+}
+
+void PathManager::orderByScoreRandomed()
+{
+    //score is the distance * [0.9,1.1]
+    struct scoreWithId scoreArray[pathNumber];
+    int i = 0;
+    for (auto &&path : dnaList)
+    {
+        
+        scoreArray[i].score = map.getDistance(evaluateEndPoint(path));
+        scoreArray[i].score *= scoreModulatorDistrib(generator);
+        scoreArray[i].id = i;
+        i++;
+    }
+        
+    std::sort(scoreArray, scoreArray+pathNumber,PathManager::scoreComparer);
+    
+    std::vector<point*> newPathVector;
+    for (size_t i = 0; i < pathNumber; i++)
+    {
+        newPathVector.push_back(dnaList.at(scoreArray[i].id));    
+    }
+    
+}
+
+
 
 void PathManager::printAllPaths()
 {
     for (auto &&path : dnaList)
     {
-        std:: cout << "-----------PATH---------";
+        std:: cout << "-----------PATH---------\n";
         for (size_t i = 0; i < pathLen; i++)
         {
             std::cout << "(" << path[i].x << "," << path[i].y<<")" << std::endl;
