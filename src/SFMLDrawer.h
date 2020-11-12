@@ -6,31 +6,32 @@
 #include <random>
 #include "GeometricForms.h"
 #include "Map.h"
+#include "PathManager.h"
 
+
+/*
+coordinates used are
+origin is top left
+x/first component is width
+y/second component is height
+*/
 
 
 class SFMLDrawer
 {
 private:
     // static because why not
-    static std::default_random_engine generator;
-    
-    //these depends on the map size, it's not static
-    std::uniform_real_distribution<float> xPlacementDistrib;
-    std::uniform_real_distribution<float> yPlacementDistrib;
-    //no differences for x and y in the size since 
-    //not all forms have 2 size parameters
-    std::uniform_real_distribution<float> sizeDistrib;
 
 
     std::vector<sf::Shape*> cachedObstacles;
     const sf::Color DEFAULT_COLOR = sf::Color::Cyan;
-    Map map;
+    Map &map;
+    PathManager &pathManager;
 
 
 
 public:
-    SFMLDrawer(Map map);
+    SFMLDrawer(Map &map, PathManager &pahManager);
     ~SFMLDrawer();
     void addCircle(point center, float radius);
     void addRectangle(point center, float width, float height);
@@ -38,6 +39,8 @@ public:
     void drawAll(sf::RenderWindow &window);
     //UNIMPLEMENTED
     void addRandomObstacles(int n);
+
+    std::vector<point*> getList();
 };
 
 #endif

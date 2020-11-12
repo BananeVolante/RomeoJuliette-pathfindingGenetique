@@ -1,6 +1,6 @@
 #include "SFMLDrawer.h"
 
-SFMLDrawer::SFMLDrawer(Map mapP) : map(mapP)
+SFMLDrawer::SFMLDrawer(Map &mapP, PathManager &pathManagerP) : map(mapP), pathManager(pathManagerP)
 {
 
 }
@@ -48,9 +48,31 @@ void SFMLDrawer::drawAll(sf::RenderWindow &window)
     {
         window.draw(*i);
     }
+
+    for (auto &&path : pathManager.getDnaList())
+    {
+        point lastPos = map.start;
+        for (size_t i = 0; i < pathManager.pathLen; i++)
+        {
+            sf::Vertex line[] = 
+            {
+                sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y)),
+                sf::Vertex(sf::Vector2f(lastPos.x+path[i].x, lastPos.y + path[i].y))
+            };
+            window.draw(line, 2, sf::Lines);
+            lastPos.x += path[i].x;
+            lastPos.y += path[i].y;
+        }
+        
+    }
     
 }
 
+
+std::vector<point*> SFMLDrawer::getList()
+{
+    return pathManager.getDnaList();
+}
 
 
 //TODO ---- IMPLEMENT
