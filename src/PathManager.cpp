@@ -1,7 +1,7 @@
 #include "PathManager.h"
 
 
-PathManager::PathManager(Map mapP, size_t pathLenP, size_t pathNumberP, float baseElementP)
+PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP)
  : pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), map(mapP), distrib(1,5)
 {
 }
@@ -24,6 +24,7 @@ void PathManager::fillRandomPaths()
         dnaList.push_back(currentPath);
         // that's a copy
         point currentPos = map.start;
+        point tmpPos;
         for (size_t j = 0; j < pathLen; j++)
         {
             do
@@ -48,10 +49,12 @@ void PathManager::fillRandomPaths()
                     break;
 
                 }
-                currentPos.x =+ currentPath[j].x;
-                currentPos.y =+ currentPath[j].y;
-            } while (map.isInObstacle(currentPos));
-            
+                
+                tmpPos.x = currentPos.x + currentPath[j].x;
+                tmpPos.y = currentPos.y + currentPath[j].y;
+            } while (map.isInObstacle(tmpPos));
+
+            currentPos = tmpPos;
         }
         
     }

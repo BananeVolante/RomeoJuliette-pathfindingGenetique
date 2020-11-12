@@ -1,3 +1,6 @@
+#ifndef PATH_MANAGER_H
+#define PATH_MANAGER_H
+
 #include <vector>
 #include <random>
 
@@ -8,14 +11,19 @@
 
 class PathManager
 {
+public: 
+    const size_t pathLen;
+    const size_t pathNumber;
+
+
+
 private:
-    size_t pathLen;
-    size_t pathNumber;
+
 
     // the distance (in x, y or both) of the elementary movement
     float baseElement;
 
-    Map map;
+    Map &map;
 
     //vector of arrays
     std::vector<point*> dnaList;
@@ -26,13 +34,18 @@ private:
 
 
 public:
-    PathManager(Map map, size_t pathLen, size_t pathNumer, float baseElement);
+
+    PathManager(Map &map, size_t pathLen, size_t pathNumer, float baseElement);
     ~PathManager();
 
+    //Must be called after adding obstacles
     void fillRandomPaths();
     std::vector<point*> getDnaList();
+
+
 
     //DBG
     //DO NOT USE WITH A USABLE PATHS
     void printAllPaths();
 };
+#endif
