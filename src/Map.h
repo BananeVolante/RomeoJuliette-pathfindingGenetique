@@ -25,7 +25,9 @@ public:
     void addRectangle(float x, float y, float width, float height);
     void addLine(float x, float y, float size);
 
+    // return distance from point to end
     float getDistance(point p);
+    bool isInObstacle(point p);
 
 
     const float lineWidth = 1.01;

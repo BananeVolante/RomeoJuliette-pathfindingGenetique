@@ -6,7 +6,7 @@
 Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height),
  start(point{0,0}), end(point{width, height})
 {
-    //if i want the bottom left corner's coordinates to be 0,0, the rectangle's
+    //if i want the top left corner's coordinates to be 0,0, the rectangle's
     //center must have these coordinates
 
     obstacleList = std::vector<GeometricForm*>();
@@ -25,6 +25,7 @@ Map::~Map()
 //must be in the map
 void Map::addForm(GeometricForm* form) 
 {
+    std::cout << "added obstacle" << std::endl;
     if(!mapHitbox.isInHitbox(form->getCenter()))
         throw new std::invalid_argument("The forms' center must be inside the map");
     obstacleList.push_back(form);
@@ -70,6 +71,22 @@ void Map::addLine(float x, float y, float size)
 float Map::getDistance(point p)
 {
     return sqrtf(SQUARE(p.x - end.x) + SQUARE(p.y-end.y));
+}
+
+
+bool Map::isInObstacle(point p)
+{
+
+    for (auto &&i : obstacleList)
+    {
+        if(i->isInHitbox(p))
+            return true;
+    }
+
+    if(!mapHitbox.isInHitbox(p))
+        return true;
+    return false;
+    
 }
 
 
