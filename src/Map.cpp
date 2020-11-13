@@ -25,7 +25,6 @@ Map::~Map()
 //must be in the map
 void Map::addForm(GeometricForm* form) 
 {
-    std::cout << "added obstacle" << std::endl;
     if(!mapHitbox.isInHitbox(form->getCenter()))
         throw new std::invalid_argument("The forms' center must be inside the map");
     obstacleList.push_back(form);
