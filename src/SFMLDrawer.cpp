@@ -76,7 +76,7 @@ std::vector<point*> SFMLDrawer::getList()
 
 
 //TODO ---- IMPLEMENT
-void SFMLDrawer::addRandomObstacles(int n)
+/*void SFMLDrawer::addRandomObstacles(int n)
 {
 
-}
+}*/

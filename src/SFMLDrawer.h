@@ -38,7 +38,7 @@ public:
     void addLine(point center, float size);
     void drawAll(sf::RenderWindow &window);
     //UNIMPLEMENTED
-    void addRandomObstacles(int n);
+    //void addRandomObstacles(int n);
 
     std::vector<point*> getList();
 };
