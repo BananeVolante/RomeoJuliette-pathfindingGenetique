@@ -19,8 +19,8 @@ protected:
 public:
     GeometricForm(point center);
     virtual ~GeometricForm();
-    virtual bool isInHitbox(point point) =0 ;
-    point getCenter();
+    virtual bool isInHitbox(const point point) const =0;
+    const point getCenter() const;
 
 
     friend std::ostream& operator<<(std::ostream& os, const GeometricForm& form);
@@ -35,7 +35,7 @@ protected:
     std::ostream& handleCoutPrint(std::ostream& os) const;
 public:
     Circle(point center, float radius);
-    bool isInHitbox(point point);
+    bool isInHitbox(const point point) const;
 };
 
 class Rectangle : public GeometricForm
@@ -46,17 +46,7 @@ protected:
     std::ostream& handleCoutPrint(std::ostream& os) const;
 public : 
     Rectangle(point center, float width, float height);
-    virtual bool isInHitbox(point point);
+    virtual bool isInHitbox(const point point) const;
 };
 
-class Line : public Rectangle
-{
-protected:
-//for now i'll only add vertical lines
-    //angle
-
-    std::ostream& handleCoutPrint(std::ostream& os) const;
-public:
-    Line(point center, float size);
-};
 #endif  

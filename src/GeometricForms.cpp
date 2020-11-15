@@ -22,7 +22,7 @@ std::ostream& operator<<(std::ostream& os, const GeometricForm& form)
     return form.handleCoutPrint(os); 
 }
 
-point GeometricForm::getCenter()
+const point GeometricForm::getCenter() const
 {
     return center;
 }
@@ -34,7 +34,7 @@ Circle::Circle(point centerP, float radiusP) : GeometricForm(centerP), radius(ra
     if(radiusP<=0)
         throw new std::invalid_argument("radius must be >= 0");
 }
-bool Circle::isInHitbox(point point)
+bool Circle::isInHitbox(const point point) const
 {
     return ( SQUARE(center.x - point.x)+ SQUARE(center.y - point.y) ) <= SQUARE(radius); 
 }
@@ -56,7 +56,7 @@ Rectangle::Rectangle(point centerP, float widthP, float heightP) : GeometricForm
         throw new std::invalid_argument("width and height must be >0");
 }
 
-bool Rectangle::isInHitbox(point point)
+bool Rectangle::isInHitbox(const point point) const
 {
     /*
     parametric equation of a rectangle : 
@@ -83,18 +83,3 @@ std::ostream& Rectangle::handleCoutPrint(std::ostream& os) const
 }
 
 
-//Line
-    //the 1.01
-    //must be at least as wide as the path's elementary element
-    //later, must be directly fixed using a constant somewhere else
-Line::Line(point centerP, float size) : Rectangle(centerP, 1.01,size)
-{
-
-}
-
-std::ostream& Line::handleCoutPrint(std::ostream& os) const
-{
-    GeometricForm::handleCoutPrint(os) <<" size : " << height;
-
-    return os;
-}
