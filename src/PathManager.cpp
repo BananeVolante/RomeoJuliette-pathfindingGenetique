@@ -4,9 +4,8 @@
 
 
 PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP)
- : pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), map(mapP),
- generator(time(NULL)),  directionDistrib(1,5), 
- scoreModulatorDistrib(0.95,1.05), crossDistrib(0,pathLen), mutationDistrib(0,100)
+:   pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), 
+    map(mapP),generator(time(NULL)),  crossDistrib(0,pathLen) 
 {
 }
 
@@ -212,12 +211,13 @@ point PathManager::getRandomMovement()
     case 4:
         return point{0,baseElement};
         break;
-    case 5:
+    default:
         return point{0,-baseElement};
         break;
     }
-    return point{-10000,-10000};
 }
+
+
 
 void PathManager::printAllPaths()
 {

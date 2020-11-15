@@ -47,10 +47,10 @@ private:
     
 
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> directionDistrib;
-    std::uniform_real_distribution<float> scoreModulatorDistrib;
+    std::uniform_int_distribution<int> directionDistrib{1,5};
+    std::uniform_real_distribution<float> scoreModulatorDistrib{0.95, 1.05};
     std::uniform_int_distribution<int> crossDistrib;
-    std::uniform_real_distribution<float> mutationDistrib;
+    std::uniform_real_distribution<float> mutationDistrib{0,100};
 
 
 public:
