@@ -22,7 +22,7 @@ PathManager::~PathManager()
 
 point PathManager::evaluateEndPoint(point* path)
 {
-    point end{0,0};
+    point end = map.start;
     for (size_t i = 0; i < pathLen; i++)
     {
         end.x += path[i].x;
