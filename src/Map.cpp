@@ -4,7 +4,7 @@
 #include <math.h>
 
 Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height),
- start(point{0,0}), end(point{width, height})
+ start(point{1000,1000}), end(point{0, 0})
 {
     //if i want the top left corner's coordinates to be 0,0, the rectangle's
     //center must have these coordinates
@@ -67,9 +67,10 @@ void Map::addLine(float x, float y, float size)
 }
 
 
-float Map::getDistance(point p)
+float Map::getSquaredDistance(point p)
 {
-    return sqrtf(SQUARE(p.x - end.x) + SQUARE(p.y-end.y));
+    //return (p.x - end.x)*(p.x - end.x) + (p.y-end.y)*(p.y-end.y);
+    return SQUARE(p.x - end.x) + SQUARE(p.y-end.y);
 }
 
 

@@ -26,11 +26,11 @@ public:
     void addLine(float x, float y, float size);
 
     // return distance from point to end
-    float getDistance(point p);
+    float getSquaredDistance(point p);
     bool isInObstacle(point p);
 
 
-    const float lineWidth = 1.01;
+    const float lineWidth = 10.1;
     const point start;
     const point end;
     
