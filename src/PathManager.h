@@ -39,11 +39,18 @@ private:
         int id;
     };
     static bool scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs);
+    point getRandomMovement();
+    // determine if the rest of the path does not go in obstacles or outside the map
+    //takes a path, an offset, and the position corresponding to the offset
+    bool isRestOfPathValid(point* path, size_t offset, point posAtOffset);
+
     
 
     std::default_random_engine generator;
     std::uniform_int_distribution<int> directionDistrib;
     std::uniform_real_distribution<float> scoreModulatorDistrib;
+    std::uniform_int_distribution<int> crossDistrib;
+    std::uniform_real_distribution<float> mutationDistrib;
 
 
 public:
@@ -54,6 +61,8 @@ public:
     //Must be called after adding obstacles
     void fillRandomPaths();
     void orderByScoreRandomed();
+    void crossing();
+    void mutate();
 
 
 
