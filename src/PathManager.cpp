@@ -44,8 +44,7 @@ void PathManager::fillRandomPaths()
         {
             do
             {
-                currentPath[j] = getRandomMovement();
-
+                currentPath[j] = getBiasedMovement(currentPos);
 
                 tmpPos.x = currentPos.x + currentPath[j].x;
                 tmpPos.y = currentPos.y + currentPath[j].y;
@@ -156,7 +155,7 @@ void PathManager::mutate()
             if(mutationDistrib(generator) < 4)
             {
                 do
-                {
+               {
                     currentPath[i] = getRandomMovement();
 
                     tmpPos.x = currentPos.x + currentPath[i].x;
@@ -215,6 +214,72 @@ point PathManager::getRandomMovement()
         return point{0,-baseElement};
         break;
     }
+}
+
+
+// return a random movement with more chances to go toward the end point
+point PathManager::getBiasedMovement(point p)
+{
+    //https://stackoverflow.com/a/1761646
+    
+    int weights[4] = {1};
+    int sumOfWeight = 4; //4*1
+
+
+    if(p.x - map.end.x > 0) // p is at the right of the endpoint
+    {
+        weights[0] = 2;
+        sumOfWeight++;
+    }
+    else if(p.x - map.end.x < 0) // at the left
+    {
+        weights[1] = 2;
+        sumOfWeight++;
+    }
+
+    if(p.y - map.end.y > 0) // p is lower
+    {
+        weights[2] = 2;
+        sumOfWeight++;
+    }
+    else if(p.y - map.end.y < 0) // p is higher
+    {
+        weights[3] = 2;
+        sumOfWeight++;
+    }
+    
+    std::uniform_int_distribution<int> biasedDistrib(0, sumOfWeight);
+    int random = biasedDistrib(generator);
+    int movementID;
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        if(random < weights[i])
+        {
+            movementID = i;
+            break;
+        }
+        random -= weights[i];
+    }
+
+    switch (movementID)
+    {
+    case 0:
+        return point{-baseElement, 0};
+        break;
+    case 1:
+        return point{baseElement, 0};
+        break;
+    case 2:
+        return point{0, -baseElement};
+        break;
+    default:
+        return point{0, baseElement};
+        break;
+    }
+    
+
+    
 }
 
 
