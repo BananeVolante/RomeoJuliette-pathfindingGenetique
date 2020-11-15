@@ -22,10 +22,7 @@ std::ostream& operator<<(std::ostream& os, const GeometricForm& form)
     return form.handleCoutPrint(os); 
 }
 
-const point GeometricForm::getCenter() const
-{
-    return center;
-}
+
 
 //Circle
 
