@@ -1,8 +1,9 @@
 #include "Path.h"
 
-Path::Path(size_t lengthP) : length(lengthP)
+Path::Path(size_t lengthP) : length(lengthP), cachedEndPoint{0,0}
 {
-    path = (point*) malloc(length * sizeof(point));
+    // need to be calloc to make sure that the path is 0
+    path = (point*) calloc(length, sizeof(point));
 }
 
 Path::~Path()
@@ -10,14 +11,75 @@ Path::~Path()
     free(path);
 }
 
-point& Path::operator[](int index)
+PathProxy Path::operator[](int index)
 {
-    if(index >= length || index<0)
+    if((size_t)index >= length || index<0)
         throw new std::out_of_range("Tried to access an element out of bounds");
-    return path[index];
+    return PathProxy(path[index], cachedEndPoint);
 }
 
 size_t Path::getLength() const
 {
     return length;
+}
+
+
+void Path::printPath()
+{
+    for (size_t i = 0; i < length; i++)
+    {
+        std::cout<< "("<< path[i].x << "," << path[i].y << ")" << std::endl;
+    }
+}
+
+point Path::getEndPoint(const point start) const
+{
+    return cachedEndPoint + start;
+}
+
+
+
+
+
+PathProxy::PathProxy(point& currentPointP, point& endPointP) : 
+    currentPoint(currentPointP), endPoint(endPointP)
+{
+
+}
+
+PathProxy& PathProxy::operator=(point newPoint)
+{
+
+    endPoint -= currentPoint;
+    endPoint += newPoint;
+
+    currentPoint = newPoint;
+    return *this;
+}
+
+PathProxy::operator point ()
+{
+
+    return currentPoint;
+}
+
+point PathProxy::operator+(const point& p) const
+{
+    return currentPoint + p;
+}
+
+point& PathProxy::operator+=(const point& p)
+{
+    endPoint+=p;
+    return (currentPoint+=p);
+}
+
+point PathProxy::operator-(const point& p) const
+{
+    return currentPoint-p;
+}
+point& PathProxy::operator-=(const point& p)
+{
+    endPoint-=p;
+    return currentPoint-=p;
 }
