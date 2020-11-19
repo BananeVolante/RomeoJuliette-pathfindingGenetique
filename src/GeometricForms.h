@@ -9,6 +9,8 @@ typedef struct point
 {
     float x;
     float y;
+    point operator+(const point& p);
+    point& operator+=(const point& p);
 } point;
 
 class GeometricForm

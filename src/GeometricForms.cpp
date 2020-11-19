@@ -1,6 +1,20 @@
 #include "GeometricForms.h"
 #include <math.h>
 #include <stdexcept>
+//point
+
+point point::operator+(const point& p)
+{
+    return point{x+p.x , y+p.y};
+}
+point& point::operator+=(const point& p)
+{
+    x += p.x;
+    y += p.y;
+    return *this;
+}
+
+
 
 
 //GeometricForm
