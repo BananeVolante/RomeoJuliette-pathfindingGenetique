@@ -27,7 +27,7 @@ point& point::operator-=(const point& p)
 
 
 
-point point::operator*(const float& s)
+point point::operator*(const float& s) const
 {
 
     return point{x*s, y*s};
