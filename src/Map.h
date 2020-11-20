@@ -14,8 +14,9 @@ private:
 
     //used to modelize the map's hitbox
     // the left bottom corner have the 0,0 coordinates
-    Rectangle mapHitbox;
 public:
+    const Rectangle mapHitbox;
+
     Map(float width, float height);
     ~Map();
     void addCircle(point center, float radius);
