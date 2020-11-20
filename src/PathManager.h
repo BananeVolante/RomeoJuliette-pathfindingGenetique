@@ -7,6 +7,7 @@
 
 #include "GeometricForms.h"
 #include "Map.h"
+#include "Path.h"
 
 
 class PathManager
@@ -28,22 +29,21 @@ private:
     Map &map;
 
     //vector of arrays
-    std::vector<point*> dnaList;
-    //can't e static since the pathManager stores the path length
-    point evaluateEndPoint(point* path);
+    std::vector<Path> dnaList;
+
 
     //here to keep old id after sorting
     struct scoreWithId
     {
         float score;
-        int id;
+        size_t id;
     };
     static bool scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs);
     point getRandomMovement();
     point getBiasedMovement(point p);
     // determine if the rest of the path does not go in obstacles or outside the map
     //takes a path, an offset, and the position corresponding to the offset
-    bool isRestOfPathValid(point* path, size_t offset, point posAtOffset);
+    bool isRestOfPathValid(Path& path, size_t offset, point posAtOffset);
 
     
 
@@ -61,14 +61,14 @@ public:
     ~PathManager();
 
     //Must be called after adding obstacles
-    void fillRandomPaths();
+    void fillRandomPaths(); //OK
     void orderByScoreRandomed();
     void crossing();
     void mutate();
 
 
 
-    std::vector<point*> getDnaList();
+    std::vector<Path> getDnaList();
 
 
 

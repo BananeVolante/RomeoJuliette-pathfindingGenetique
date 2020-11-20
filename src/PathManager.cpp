@@ -11,32 +11,18 @@ PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float b
 
 PathManager::~PathManager()
 {
-    for (auto &&i : dnaList)
-    {
-        free(i);
-    }
     
 }
 
 
-point PathManager::evaluateEndPoint(point* path)
-{
-    point end = map.start;
-    for (size_t i = 0; i < pathLen; i++)
-    {
-        end.x += path[i].x;
-        end.y += path[i].y;
-    }
-    return end;
-}
-
 void PathManager::fillRandomPaths()
 {
-    dnaList.clear();
+    //dnaList.clear();
+    dnaList.assign(pathNumber, Path(pathLen));
     for (size_t i = 0; i < pathNumber; i++)
     {
-        point* currentPath = (point*)malloc(pathLen*sizeof(point));
-        dnaList.push_back(currentPath);
+        Path& currentPath = dnaList.at(i);
+
         // that's a copy
         point currentPos = map.start;
         point tmpPos;
@@ -46,15 +32,13 @@ void PathManager::fillRandomPaths()
             {
                 currentPath[j] = getBiasedMovement(currentPos);
 
-                tmpPos.x = currentPos.x + currentPath[j].x;
-                tmpPos.y = currentPos.y + currentPath[j].y;
+                tmpPos = currentPos + currentPath[j];
             } while (map.isInObstacle(tmpPos));
 
             currentPos = tmpPos;
         }
         
     }
-    
 }
 
 bool PathManager::scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs)
@@ -69,7 +53,7 @@ void PathManager::orderByScoreRandomed()
     for (auto &&path : dnaList)
     {
         
-        scoreArray[i].score = map.getSquaredDistance(evaluateEndPoint(path));
+        scoreArray[i].score = map.getSquaredDistance(path.getEndPoint(map.start));
         scoreArray[i].score *= scoreModulatorDistrib(generator);
         scoreArray[i].id = i;
         i++;
@@ -77,24 +61,34 @@ void PathManager::orderByScoreRandomed()
 
     std::sort(scoreArray, scoreArray+pathNumber,PathManager::scoreComparer);
     
-    std::vector<point*> newPathVector;
+    //https://devblogs.microsoft.com/oldnewthing/20170102-00/?p=95095
     for (size_t i = 0; i < pathNumber; i++)
     {
-        newPathVector.push_back(dnaList.at(scoreArray[i].id));    
+        auto current = i;
+        while (i != scoreArray[current].id)
+        {
+            auto next = scoreArray[current].id;
+            std::swap(dnaList[current], dnaList[next]);
+            scoreArray[current].id = current;
+            current = next;
+        }
+        scoreArray[current].id = current; 
     }
-    dnaList = newPathVector;
+
+    
+    
 }
 
 // create 
 void PathManager::crossing()
 {
     //get 2 best paths
-    point* worsePath = dnaList.at(0);
-    point* secondWorsePath = dnaList.at(1);
+    Path& worsePath = dnaList.at(0);
+    Path& secondWorsePath = dnaList.at(1);
 
     // get the 2 worse paths
-    point* a = dnaList.at(dnaList.size()-1);
-    point* b = dnaList.at(dnaList.size()-2);
+    Path& a = dnaList.at(dnaList.size()-1);
+    Path& b = dnaList.at(dnaList.size()-2);
 
 
     size_t crossoverPoint;
@@ -114,10 +108,8 @@ void PathManager::crossing()
             worsePath[i] = a[i];
             secondWorsePath[i] = b[i];
 
-            currentPos1.x += worsePath[i].x;
-            currentPos1.y += worsePath[i].y;
-            currentPos2.x += secondWorsePath[i].x;
-            currentPos2.y += secondWorsePath[i].y;
+            currentPos1 += worsePath[i];
+            currentPos2 += secondWorsePath[i];
         }
         //and check if the new paths does not collide with the terrain
         arePathsValid = true;
@@ -130,10 +122,8 @@ void PathManager::crossing()
                 arePathsValid = false;
                 break;
             }
-            currentPos1.x += worsePath[i].x;
-            currentPos1.y += worsePath[i].y;
-            currentPos2.x += secondWorsePath[i].x;
-            currentPos2.y += secondWorsePath[i].y;
+            currentPos1 += worsePath[i];
+            currentPos2 += secondWorsePath[i];
         }
         
     } while (!arePathsValid);
@@ -146,7 +136,7 @@ void PathManager::mutate()
     for (size_t pathIndex = 0; pathIndex < 2; pathIndex++)
     {
         
-        point* currentPath = dnaList.at(pathIndex);
+        Path& currentPath = dnaList.at(pathIndex);
         point currentPos = map.start;
         point tmpPos;
 
@@ -158,16 +148,14 @@ void PathManager::mutate()
                {
                     currentPath[i] = getRandomMovement();
 
-                    tmpPos.x = currentPos.x + currentPath[i].x;
-                    tmpPos.y = currentPos.y + currentPath[i].y;
+                    tmpPos = currentPos + currentPath[i];
 
                 } while (!isRestOfPathValid(currentPath, i, tmpPos));
                 currentPos = tmpPos;
             }
             else
             {
-                currentPos.x += currentPath[i].x;
-                currentPos.y += currentPath[i].y;
+                currentPos += currentPath[i];
             }
             
         }
@@ -175,7 +163,7 @@ void PathManager::mutate()
     }
 }
     
-bool PathManager::isRestOfPathValid(point* path, size_t offset, point posAtOffset)
+bool PathManager::isRestOfPathValid(Path& path, size_t offset, point posAtOffset)
 {
     // the the initial position
     if(map.isInObstacle(posAtOffset))
@@ -184,8 +172,7 @@ bool PathManager::isRestOfPathValid(point* path, size_t offset, point posAtOffse
     for (size_t i = offset+1; i < pathLen; i++)
     {
         //set t
-        posAtOffset.x += path[i].x;
-        posAtOffset.y += path[i].y;
+        posAtOffset += path[i];
        // std::cout << i << std::endl;
         if(map.isInObstacle(posAtOffset))
             return false;
@@ -250,7 +237,7 @@ point PathManager::getBiasedMovement(point p)
     
     std::uniform_int_distribution<int> biasedDistrib(0, sumOfWeight);
     int random = biasedDistrib(generator);
-    int movementID;
+    int movementID = 0;
 
     for (size_t i = 0; i < 4; i++)
     {
@@ -289,16 +276,13 @@ void PathManager::printAllPaths()
     for (auto &&path : dnaList)
     {
         std:: cout << "-----------PATH---------\n";
-        for (size_t i = 0; i < pathLen; i++)
-        {
-            std::cout << "(" << path[i].x << "," << path[i].y<<")" << std::endl;
-        }
+        path.printPath();
         
     }
     
 }
 
-std::vector<point*> PathManager::getDnaList()
+std::vector<Path> PathManager::getDnaList()
 {
     return dnaList;
 }
