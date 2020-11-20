@@ -9,8 +9,8 @@ all: createOBJDir main
 createOBJDir: 
 	mkdir -p $(OBJPATH)
 
-main: GeometricForms.o Map.o main.o SFMLDrawer.o PathManager.o
-	g++ $(OBJPATH)/GeometricForms.o $(OBJPATH)/Map.o $(OBJPATH)/main.o $(OBJPATH)/SFMLDrawer.o $(OBJPATH)/PathManager.o -o program $(SFML_LIBS)
+main: GeometricForms.o Map.o main.o SFMLDrawer.o PathManager.o Path.o
+	g++ $(OBJPATH)/GeometricForms.o $(OBJPATH)/Map.o $(OBJPATH)/main.o $(OBJPATH)/SFMLDrawer.o $(OBJPATH)/PathManager.o $(OBJPATH)/Path.o -o program $(SFML_LIBS)
 
 GeometricForms.o: $(SRCPATH)/GeometricForms.cpp $(SRCPATH)/GeometricForms.h
 	g++ -c $(FLAGS) $(SRCPATH)/GeometricForms.cpp -o $(OBJPATH)/$@
@@ -26,6 +26,9 @@ SFMLDrawer.o: $(SRCPATH)/SFMLDrawer.cpp $(SRCPATH)/SFMLDrawer.h
 
 PathManager.o: $(SRCPATH)/PathManager.cpp $(SRCPATH)/PathManager.h
 	g++ -c $(FLAGS) $(SRCPATH)/PathManager.cpp -o $(OBJPATH)/$@
+
+Path.o: $(SRCPATH)/Path.cpp $(SRCPATH)/Path.h
+	g++ -c $(FLAGS) $(SRCPATH)/Path.cpp -o $(OBJPATH)/$@
 
 clean:
 	rm -f $(OBJPATH)/*
