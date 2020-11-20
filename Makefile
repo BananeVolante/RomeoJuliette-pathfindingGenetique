@@ -1,4 +1,4 @@
-FLAGS :=-Wall -g -Wextra
+FLAGS :=-Wall -g -Wextra -std=c++17
 SFML_LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 SRCPATH := src
 OBJPATH := objectFiles
