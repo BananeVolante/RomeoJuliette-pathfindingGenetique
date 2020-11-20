@@ -66,6 +66,7 @@ public:
     static constexpr point RIGHT{1,0};
     static constexpr point UP{0,-1};
     static constexpr point DOWN{0,1};
+    static constexpr point NONE{0,0};
 
 };
 #endif
