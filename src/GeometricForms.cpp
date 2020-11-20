@@ -25,10 +25,30 @@ point& point::operator-=(const point& p)
     return *this;
 }
 
+
+
+point point::operator*(const float& s)
+{
+
+    return point{x*s, y*s};
+}
+
+point& point::operator*=(const float& s)
+{
+    x*=s;
+    y*=s;
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& os, const point& p)
 {
     return os << "(" << p.x << "," << p.y << ")"; 
 }
+
+
+
+
+
 
 
 

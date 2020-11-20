@@ -14,6 +14,10 @@ typedef struct point
     point operator-(const point& p) const;
     point& operator-=(const point& p);
 
+    //multiplication by a scalar
+    point operator*(const float& s);
+    point& operator*=(const float& s);
+
     // useless, but it's still interesting to say that point have <<
     friend std::ostream& operator<<(std::ostream& os, const point& p);
 
