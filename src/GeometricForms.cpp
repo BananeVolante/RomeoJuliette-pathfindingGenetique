@@ -3,7 +3,7 @@
 #include <stdexcept>
 //point
 
-point point::operator+(const point& p)
+point point::operator+(const point& p) const
 {
     return point{x+p.x , y+p.y};
 }
@@ -14,7 +14,7 @@ point& point::operator+=(const point& p)
     return *this;
 }
 
-point point::operator-(const point& p)
+point point::operator-(const point& p) const
 {
     return point{x-p.x , y-p.y};
 }
@@ -23,6 +23,11 @@ point& point::operator-=(const point& p)
     x -= p.x;
     y -= p.y;
     return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const point& p)
+{
+    return os << "(" << p.x << "," << p.y << ")"; 
 }
 
 

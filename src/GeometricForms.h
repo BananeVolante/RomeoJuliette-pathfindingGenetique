@@ -9,10 +9,14 @@ typedef struct point
 {
     float x;
     float y;
-    point operator+(const point& p);
+    point operator+(const point& p) const;
     point& operator+=(const point& p);
-    point operator-(const point& p);
+    point operator-(const point& p) const;
     point& operator-=(const point& p);
+
+    // useless, but it's still interesting to say that point have <<
+    friend std::ostream& operator<<(std::ostream& os, const point& p);
+
 } point;
 
 class GeometricForm
