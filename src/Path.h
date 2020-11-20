@@ -64,8 +64,8 @@ public:
     //must be multiplied by the base distance
     static constexpr point LEFT{-1,0};
     static constexpr point RIGHT{1,0};
-    static constexpr point UP{-1,0};
-    static constexpr point DOWN{1,0};
+    static constexpr point UP{0,-1};
+    static constexpr point DOWN{0,1};
 
 };
 #endif
