@@ -1,14 +1,34 @@
 #include "Path.h"
+#include "string.h"
 
-Path::Path(size_t lengthP) : length(lengthP), cachedEndPoint{0,0}
+
+Path::Path(size_t lengthP) : length(lengthP), 
+    cachedEndPoint{0,0}
+    
 {
-    // need to be calloc to make sure that the path is 0
-    path = (point*) calloc(length, sizeof(point));
+  //  std::cout << "Path \tCONSTRUCT" << std::endl;
+    path = (point*)calloc(length, sizeof(point));
 }
-
 Path::~Path()
 {
+   // std::cout<<"Path \tDESTRUCT" <<std::endl; 
     free(path);
+}
+
+Path::Path(const Path& oldPath)
+{
+  //  std::cout << "Path \tCOPY" << std::endl;
+    length = oldPath.length;
+    path = (point*) malloc(length * sizeof(point));
+    //memcpy(path, oldPath.path, length);
+    for (size_t i = 0; i < length; i++)
+    {
+        path[i] = oldPath.path[i];
+    }
+    
+    cachedEndPoint = oldPath.cachedEndPoint;
+    
+
 }
 
 PathProxy Path::operator[](int index)
@@ -17,6 +37,22 @@ PathProxy Path::operator[](int index)
         throw new std::out_of_range("Tried to access an element out of bounds");
     return PathProxy(path[index], cachedEndPoint);
 }
+
+Path& Path::operator=(const Path& p)
+{
+    //std::cout << "Path OPERATOR=" << std::endl;
+    if(this == &p)
+        return *this;
+
+    length = p.length;
+    cachedEndPoint = p.cachedEndPoint;
+
+    path = (point*)realloc(path, length*sizeof(point));
+    memcpy(path, p.path, length*sizeof(point));
+    return *this;
+}
+
+
 
 size_t Path::getLength() const
 {
@@ -57,6 +93,12 @@ PathProxy& PathProxy::operator=(point newPoint)
     return *this;
 }
 
+
+PathProxy& PathProxy::operator=(PathProxy& newPoint)
+{
+    return *this = newPoint.currentPoint;
+}
+
 PathProxy::operator point ()
 {
 
@@ -82,4 +124,10 @@ point& PathProxy::operator-=(const point& p)
 {
     endPoint-=p;
     return currentPoint-=p;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const PathProxy& p)
+{
+    return os << p.currentPoint; 
 }

@@ -1,5 +1,9 @@
+
+#ifndef Path_HEADER
+#define Path_HEADER
 #include "stdlib.h"
 #include "GeometricForms.h"
+
 
 
 // used to give different rules when using []
@@ -13,10 +17,16 @@ struct PathProxy
 
 
     PathProxy& operator=(point newPoint);
+    //to solve the a[x] = b[y] case
+    PathProxy& operator=(PathProxy& newPoint);
+
     point operator+(const point& p) const;
     point& operator+=(const point& p);
     point operator-(const point& p) const;
     point& operator-=(const point& p);
+
+    friend std::ostream& operator<<(std::ostream& os, const PathProxy& p);
+
 
     operator  point ();
 
@@ -40,9 +50,11 @@ private:
 public:
     Path(size_t pathLength);
     ~Path();
+    Path(const Path&);
 
     //see pathProxy
     PathProxy operator[](int index);
+    Path& operator=(const Path&);
 
     size_t getLength() const;
     point getEndPoint(point startPoint) const;
@@ -50,6 +62,8 @@ public:
     void printPath();
 
 };
+#endif
+
 
 
 
