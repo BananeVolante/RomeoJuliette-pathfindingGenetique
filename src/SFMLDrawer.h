@@ -28,6 +28,8 @@ private:
     Map &map;
     PathManager &pathManager;
 
+    const float startAndEndPointSize;
+
 
 
 public:
@@ -40,7 +42,7 @@ public:
     //UNIMPLEMENTED
     //void addRandomObstacles(int n);
 
-    std::vector<point*> getList();
+    std::vector<Path> getList();
 };
 
 #endif

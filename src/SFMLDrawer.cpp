@@ -1,6 +1,10 @@
 #include "SFMLDrawer.h"
+#include <math.h>
 
-SFMLDrawer::SFMLDrawer(Map &mapP, PathManager &pathManagerP) : map(mapP), pathManager(pathManagerP)
+
+SFMLDrawer::SFMLDrawer(Map &mapP, PathManager &pathManagerP) : 
+map(mapP), pathManager(pathManagerP), 
+startAndEndPointSize(std::min(map.mapHitbox.height, map.mapHitbox.width)/100)
 {
 
 }
@@ -54,22 +58,34 @@ void SFMLDrawer::drawAll(sf::RenderWindow &window)
         point lastPos = map.start;
         for (size_t i = 0; i < pathManager.pathLen; i++)
         {
-            sf::Vertex line[] = 
+            sf::Vertex line[2] = 
             {
                 sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y)),
-                sf::Vertex(sf::Vector2f(lastPos.x+path[i].x, lastPos.y + path[i].y))
             };
+            lastPos += path[i];
+            line[1] = sf::Vertex(sf::Vector2f(lastPos.x, lastPos.y));
+
             window.draw(line, 2, sf::Lines);
-            lastPos.x += path[i].x;
-            lastPos.y += path[i].y;
         }
         
     }
+
+    sf::CircleShape startPoint(startAndEndPointSize);
+    startPoint.setOrigin(startAndEndPointSize, startAndEndPointSize);
+    startPoint.setPosition(map.start.x, map.start.y);
+    startPoint.setFillColor(sf::Color::Red);
+    window.draw(startPoint);
+
+    sf::CircleShape endPoint(startAndEndPointSize);
+    endPoint.setOrigin(startAndEndPointSize, startAndEndPointSize);
+    endPoint.setPosition(map.end.x, map.end.y);
+    endPoint.setFillColor(sf::Color::Red);
+    window.draw(endPoint);
     
 }
 
 
-std::vector<point*> SFMLDrawer::getList()
+std::vector<Path> SFMLDrawer::getList()
 {
     return pathManager.getDnaList();
 }
