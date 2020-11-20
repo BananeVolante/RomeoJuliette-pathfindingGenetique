@@ -20,13 +20,16 @@ public:
 
 private:
 
-
     
 
     // the distance (in x, y or both) of the elementary movement
     float baseElement;
 
     Map &map;
+
+    point replacementArray[4] = {Path::UP, Path::DOWN, Path::LEFT, Path::RIGHT};
+    size_t replacementIndex;
+
 
     //vector of arrays
     std::vector<Path> dnaList;
@@ -45,10 +48,11 @@ private:
     //takes a path, an offset, and the position corresponding to the offset
     bool isRestOfPathValid(Path& path, size_t offset, point posAtOffset);
 
-    
+    point getRandomMovementNoReplacement();
+    void randomMovementReplace();
 
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> directionDistrib{1,5};
+    std::uniform_int_distribution<int> directionDistrib{1,4};
     std::uniform_real_distribution<float> scoreModulatorDistrib{0.95, 1.05};
     std::uniform_int_distribution<int> crossDistrib;
     std::uniform_real_distribution<float> mutationDistrib{0,100};

@@ -142,11 +142,12 @@ void PathManager::mutate()
 
         for (size_t i = 0; i < pathLen; i++)
         {    
+            randomMovementReplace();
             if(mutationDistrib(generator) < 4)
             {
                 do
                {
-                    currentPath[i] = getRandomMovement();
+                    currentPath[i] = getRandomMovementNoReplacement();
 
                     tmpPos = currentPos + currentPath[i];
 
@@ -157,7 +158,6 @@ void PathManager::mutate()
             {
                 currentPos += currentPath[i];
             }
-            
         }
 
     }
@@ -186,22 +186,23 @@ point PathManager::getRandomMovement()
     switch (roll)
     {
     case 1:
-        return point{0,0};
+        return Path::UP*baseElement;
         break;
     case 2:
-        return point{baseElement,0};
+        return Path::DOWN*baseElement;
         break;
     case 3:
-        return point{-baseElement,0};
+        return Path::LEFT*baseElement;
         break;
     case 4:
-        return point{0,baseElement};
+        return Path::RIGHT*baseElement;
         break;
     default:
-        return point{0,-baseElement};
-        break;
+        return Path::NONE;
     }
 }
+
+
 
 
 // return a random movement with more chances to go toward the end point
@@ -252,16 +253,16 @@ point PathManager::getBiasedMovement(point p)
     switch (movementID)
     {
     case 0:
-        return point{-baseElement, 0};
+        return Path::LEFT*baseElement;
         break;
     case 1:
-        return point{baseElement, 0};
+        return Path::RIGHT*baseElement;
         break;
     case 2:
-        return point{0, -baseElement};
+        return Path::UP*baseElement;
         break;
     default:
-        return point{0, baseElement};
+        return Path::DOWN*baseElement;
         break;
     }
     
@@ -269,6 +270,21 @@ point PathManager::getBiasedMovement(point p)
     
 }
 
+point PathManager::getRandomMovementNoReplacement()
+{
+    if(replacementIndex>3)
+    {
+        return Path::NONE;
+    }
+    return replacementArray[replacementIndex++]*baseElement;
+}
+
+
+void PathManager::randomMovementReplace()
+{
+    std::shuffle(replacementArray, replacementArray+4, generator);
+    replacementIndex=0;
+}
 
 
 void PathManager::printAllPaths()
