@@ -1,5 +1,6 @@
 #include "Path.h"
 #include "string.h"
+#include "point.h"
 
 
 Path::Path(size_t lengthP) : length(lengthP), 
