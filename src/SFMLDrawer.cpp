@@ -4,18 +4,34 @@
 
 SFMLDrawer::SFMLDrawer(Map &mapP, PathManager &pathManagerP, sf::RenderWindow& windowP) : 
 map(mapP), pathManager(pathManagerP), window(windowP),
-startAndEndPointSize(std::min(map.mapHitbox.height, map.mapHitbox.width)/100)
+startAndEndPointSize(std::min(map.mapHitbox.height, map.mapHitbox.width)/100), 
+startPointShape(startAndEndPointSize), endPointShape(startAndEndPointSize)
 {
 
-    mapToWindowConversion.x = map.mapHitbox.width / window.getSize().x;
-    mapToWindowConversion.y = map.mapHitbox.height / window.getSize().y;
+    mapToWindowConversion.x =  window.getSize().x / map.mapHitbox.width; 
+    mapToWindowConversion.y =   window.getSize().y / map.mapHitbox.height;
 
-    obstacleTexture.create(window.getSize().x, window.getSize().y);
+    staticTextures.create(map.mapHitbox.width,map.mapHitbox.height);
     //must intialise obstacleSprite after calling create on the texture
-    obstacleSprite = sf::Sprite(obstacleTexture.getTexture());
+    obstacleSprite = sf::Sprite(staticTextures.getTexture());
 
-    pathTexture.create(window.getSize().x, window.getSize().y);
+    pathTexture.create(map.mapHitbox.width,map.mapHitbox.height);
     pathSprite = sf::Sprite(pathTexture.getTexture());
+
+    pathSprite.setScale(mapToWindowConversion.x, mapToWindowConversion.y);
+    obstacleSprite.setScale(mapToWindowConversion.x, mapToWindowConversion.y);
+
+
+    startPointShape.setOrigin(startAndEndPointSize, startAndEndPointSize);
+    startPointShape.setPosition(map.start.x, map.start.y);
+    startPointShape.setFillColor(sf::Color::Red);
+    staticTextures.draw(startPointShape);
+
+
+    endPointShape.setOrigin(startAndEndPointSize, startAndEndPointSize);
+    endPointShape.setPosition(map.end.x, map.end.y);
+    endPointShape.setFillColor(sf::Color::Red);
+    staticTextures.draw(endPointShape);
 
 }
 
@@ -38,8 +54,8 @@ void SFMLDrawer::addCircle(point center, float radius)
     shape.setOrigin(radius, radius);
     shape.setPosition(center.x, center.y);
     shape.setFillColor(DEFAULT_COLOR);
-    obstacleTexture.draw(shape);
-    obstacleTexture.display();
+    staticTextures.draw(shape);
+    staticTextures.display();
 
     map.addCircle(center, radius);
 }
@@ -53,8 +69,8 @@ void SFMLDrawer::addRectangle(point center, float width, float height)
     shape.setOrigin(width/2, height/2);
     shape.setPosition(center.x, center.y);
     shape.setFillColor(DEFAULT_COLOR);
-    obstacleTexture.draw(shape);
-    obstacleTexture.display();
+    staticTextures.draw(shape);
+    staticTextures.display();
 
     map.addRectangle(center, width, height);
 }
@@ -89,17 +105,7 @@ void SFMLDrawer::drawAll()
     window.draw(obstacleSprite);
 
 
-    sf::CircleShape startPoint(startAndEndPointSize);
-    startPoint.setOrigin(startAndEndPointSize, startAndEndPointSize);
-    startPoint.setPosition(map.start.x, map.start.y);
-    startPoint.setFillColor(sf::Color::Red);
-    window.draw(startPoint);
 
-    sf::CircleShape endPoint(startAndEndPointSize);
-    endPoint.setOrigin(startAndEndPointSize, startAndEndPointSize);
-    endPoint.setPosition(map.end.x, map.end.y);
-    endPoint.setFillColor(sf::Color::Red);
-    window.draw(endPoint);
     
 }
 

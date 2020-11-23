@@ -28,13 +28,17 @@ private:
     PathManager &pathManager;
     sf::RenderWindow& window;
 
-    sf::RenderTexture obstacleTexture;
+    // the obstacles shapes and the stat and end point shapes
+    sf::RenderTexture staticTextures;
     sf::Sprite obstacleSprite;
-    const float startAndEndPointSize;
 
 
     sf::Sprite pathSprite;
     sf::RenderTexture pathTexture;
+
+    const float startAndEndPointSize;
+    sf::CircleShape startPointShape;
+    sf::CircleShape endPointShape;
 
     point mapToWindowConversion;
     point mapToWindow(const point p) const;
