@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <math.h>
 
-Map::Map(float width, float height) : mapHitbox(point{.x=width/2, .y=height/2}, width, height),
- start(point{0,0}), end(point{1000, 1000})
+Map::Map(float width, float height, point startP, point endP, float lineWidthP) :
+ mapHitbox(point{.x=width/2, .y=height/2}, width, height),
+  lineWidth(lineWidthP),start(startP), end(endP)
 {
     //if i want the top left corner's coordinates to be 0,0, the rectangle's
     //center must have these coordinates

@@ -17,7 +17,7 @@ private:
 public:
     const Rectangle mapHitbox;
 
-    Map(float width, float height);
+    Map(float width, float height, point start, point end, float lineWidth);
     ~Map();
     void addCircle(point center, float radius);
     void addRectangle(point center, float width, float height);
@@ -31,7 +31,7 @@ public:
     bool isInObstacle(point p);
 
 
-    const float lineWidth = 10.1;
+    const float lineWidth;
     const point start;
     const point end;
     
