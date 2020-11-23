@@ -8,7 +8,7 @@ start with default parameters :
 > screenSize = 1920 * 1080
 > mapSize = 1920*1080
 > startPoint = {0,0}; endPoint = {1920,1080};
-> pathLen = 3000; 
+> pathLen = 1000; 
 > pathNumber = 10;
 > baseElement = 10;
 > mutationChance = 4
