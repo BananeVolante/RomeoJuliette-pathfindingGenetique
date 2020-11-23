@@ -4,7 +4,8 @@
 
 
 
-TextBox::TextBox(sf::Vector2f positionP, sf::Font& fontP) : SelectableElement(positionP), font(fontP)
+TextBox::TextBox(sf::Vector2f positionP,std::string titleP,  sf::Font& fontP) : 
+SelectableElement(positionP, titleP, fontP)
 {
     displayedText.setFont(font);
     displayedText.setCharacterSize(36);

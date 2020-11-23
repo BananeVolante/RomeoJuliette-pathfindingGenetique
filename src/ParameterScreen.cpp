@@ -1,6 +1,7 @@
 #include "ParameterScreen.h"
 
-ParameterScreen::ParameterScreen(sf::RenderWindow& windowP) : window(windowP) 
+ParameterScreen::ParameterScreen(sf::RenderWindow& windowP) :
+    window(windowP)
 {
     
 }
@@ -21,7 +22,7 @@ void ParameterScreen::display()
     }
     for (size_t i = 0; i < 10; i++)
     {
-        textBoxes.push_back(TextBox(sf::Vector2f(300*(i%3), 200*(i/3)), font));  
+        textBoxes.push_back(TextBox(sf::Vector2f(300*(i%3), 200*(i/3)),"a",  font));  
     }
     textBoxes[selectedId].select();
 
