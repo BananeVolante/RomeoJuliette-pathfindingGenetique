@@ -3,9 +3,9 @@
 #include <time.h>
 
 
-PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP)
-:   pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), 
-    map(mapP),generator(time(NULL)),  crossDistrib(0,pathLen) 
+PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP, float mutationChanceP)
+:   pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), mutationChance(mutationChanceP),
+    map(mapP),generator(time(NULL)),  crossDistrib(0,pathLen)
 {
 }
 
@@ -17,13 +17,14 @@ PathManager::~PathManager()
 
 void PathManager::fillRandomPaths()
 {
+
+
     //dnaList.clear();
     dnaList.assign(pathNumber, Path(pathLen));
     for (size_t i = 0; i < pathNumber; i++)
     {
         Path& currentPath = dnaList.at(i);
 
-        // that's a copy
         point currentPos = map.start;
         point tmpPos;
         for (size_t j = 0; j < pathLen; j++)
@@ -31,7 +32,6 @@ void PathManager::fillRandomPaths()
             do
             {
                 currentPath[j] = getBiasedMovement(currentPos);
-
                 tmpPos = currentPos + currentPath[j];
             } while (map.isInObstacle(tmpPos));
 
@@ -39,6 +39,8 @@ void PathManager::fillRandomPaths()
         }
         
     }
+
+    
 }
 
 bool PathManager::scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs)
@@ -86,6 +88,7 @@ void PathManager::crossing()
     Path& worsePath = dnaList.at(0);
     Path& secondWorsePath = dnaList.at(1);
 
+    
     // get the 2 worse paths
     Path& a = dnaList.at(dnaList.size()-1);
     Path& b = dnaList.at(dnaList.size()-2);
@@ -95,10 +98,9 @@ void PathManager::crossing()
     size_t i=0; //crossIndex
 
     bool arePathsValid;
-
     do
     {
-
+        arePathsValid = true;
         point currentPos1 = map.start;
         point currentPos2 = map.start;
         crossoverPoint = crossDistrib(generator);
@@ -112,21 +114,23 @@ void PathManager::crossing()
             currentPos2 += secondWorsePath[i];
         }
         //and check if the new paths does not collide with the terrain
-        arePathsValid = true;
-        for (i=i; i < pathLen; i++)
+        for (i=crossoverPoint; i < pathLen; i++)
         {
             worsePath[i] = b[i];
             secondWorsePath[i] = a[i];
-            if(map.isInObstacle(currentPos1) || map.isInObstacle(currentPos2))
+            currentPos1 += worsePath[i];
+            currentPos2 += secondWorsePath[i];
+             if(map.isInObstacle(currentPos1) || map.isInObstacle(currentPos2))
             {
                 arePathsValid = false;
                 break;
-            }
-            currentPos1 += worsePath[i];
-            currentPos2 += secondWorsePath[i];
+            } 
+
         }
         
     } while (!arePathsValid);
+
+
 }
 
 
@@ -142,12 +146,16 @@ void PathManager::mutate()
 
         for (size_t i = 0; i < pathLen; i++)
         {    
-            randomMovementReplace();
-            if(mutationDistrib(generator) < 4)
+            if(mutationDistrib(generator) < mutationChance)
             {
+                // here to replace the elements that had been picked before
+                randomMovementReplace();
                 do
-               {
+                {
+                    
                     currentPath[i] = getRandomMovementNoReplacement();
+                    //gives less interesting results
+                    //currentPath[i] = getBiasedMovement(currentPos);
 
                     tmpPos = currentPos + currentPath[i];
 
@@ -165,15 +173,13 @@ void PathManager::mutate()
     
 bool PathManager::isRestOfPathValid(Path& path, size_t offset, point posAtOffset)
 {
-    // the the initial position
+    // the initial position
     if(map.isInObstacle(posAtOffset))
         return false;
     
     for (size_t i = offset+1; i < pathLen; i++)
     {
-        //set t
-        posAtOffset += path[i];
-       // std::cout << i << std::endl;
+        posAtOffset += (point)path[i];
         if(map.isInObstacle(posAtOffset))
             return false;
     }
@@ -272,8 +278,10 @@ point PathManager::getBiasedMovement(point p)
 
 point PathManager::getRandomMovementNoReplacement()
 {
-    if(replacementIndex>3)
+    if(replacementIndex>4)
     {
+        std::cout<<"error"<<std::endl;
+
         return Path::NONE;
     }
     return replacementArray[replacementIndex++]*baseElement;
@@ -289,11 +297,12 @@ void PathManager::randomMovementReplace()
 
 void PathManager::printAllPaths()
 {
+    int i=0;
     for (auto &&path : dnaList)
     {
-        std:: cout << "-----------PATH---------\n";
+        std:: cout << "-----------PATH-"<<i<<" --------\n";
         path.printPath();
-        
+        i++;
     }
     
 }

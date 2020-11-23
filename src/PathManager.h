@@ -8,6 +8,8 @@
 #include "GeometricForms.h"
 #include "Map.h"
 #include "Path.h"
+#include "cassert"
+
 
 
 class PathManager
@@ -24,6 +26,8 @@ private:
 
     // the distance (in x, y or both) of the elementary movement
     float baseElement;
+
+    float mutationChance; 
 
     Map &map;
 
@@ -61,7 +65,7 @@ private:
 
 public:
 
-    PathManager(Map &map, size_t pathLen, size_t pathNumer, float baseElement);
+    PathManager(Map &map, size_t pathLen, size_t pathNumer, float baseElement, float mutationChance);
     ~PathManager();
 
     //Must be called after adding obstacles
