@@ -11,6 +11,8 @@
 
 int main(int argc, char* argv[])
 {
+
+    
     point screenSize;
     point mapSize;
     point startPoint; point endPoint;
@@ -21,11 +23,11 @@ int main(int argc, char* argv[])
     if(argc == 1)
     {
         screenSize = {1920,1080};
-        mapSize = {1000,1000};
-        startPoint ={0,0}; endPoint ={1000,1000};
-        pathLen = 3000; pathNumber = 10;
-        baseElement = 10;
-        lineWidth = 10+0.1;
+        mapSize = {1920,1080};
+        startPoint ={0,0}; endPoint ={1920,1080};
+        pathLen = 1000; pathNumber = 10;
+        baseElement = 5;
+        lineWidth = baseElement+0.001;
         mutationChance = 4;
     }else if (argc <13)
     {
@@ -79,8 +81,11 @@ int main(int argc, char* argv[])
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        std::cout<<"order by score" << std::endl;
         manager.orderByScoreRandomed();
+        std::cout<<"order by score" << std::endl;
         manager.crossing();
+        std::cout<<"order by score" << std::endl;
         manager.mutate();
 
         window.clear();
