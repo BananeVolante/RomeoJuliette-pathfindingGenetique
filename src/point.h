@@ -15,6 +15,8 @@ typedef struct point
     point operator*(const float& s) const;
     point& operator*=(const float& s);
 
+    bool operator==(const point& p) const;
+
     // useless, but it's still interesting to say that point have <<
     friend std::ostream& operator<<(std::ostream& os, const point& p);
 

@@ -39,6 +39,13 @@ point& point::operator*=(const float& s)
     return *this;
 }
 
+
+bool point::operator==(const point& p) const
+{
+    return (x==p.x && y==p.y);
+}
+
+
 std::ostream& operator<<(std::ostream& os, const point& p)
 {
     return os << "(" << p.x << "," << p.y << ")"; 
