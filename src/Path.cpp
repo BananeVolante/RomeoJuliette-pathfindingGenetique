@@ -60,6 +60,11 @@ size_t Path::getLength() const
     return length;
 }
 
+void Path::setLength(size_t lengthP)
+{
+    length = lengthP;
+}
+
 
 void Path::printPath()
 {

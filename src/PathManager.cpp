@@ -3,9 +3,9 @@
 #include <time.h>
 
 
-PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP, float mutationChanceP)
-:   pathLen(pathLenP), pathNumber(pathNumberP), baseElement(baseElementP), mutationChance(mutationChanceP),
-    map(mapP),generator(time(NULL)),  crossDistrib(0,pathLen)
+PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP, float mutationChanceP, int maxConsecutiveScoresP)
+:    pathNumber(pathNumberP),pathLen(pathLenP), baseElement(baseElementP), mutationChance(mutationChanceP),
+    map(mapP), maxConsecutiveScores(maxConsecutiveScoresP), generator(time(NULL)),  crossDistrib(0,pathLen)
 {
 }
 
@@ -50,12 +50,15 @@ bool PathManager::scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs)
 
 void PathManager::orderByScoreRandomed()
 {
+
+
     struct scoreWithId scoreArray[pathNumber];
     int i = 0;
     for (auto &&path : dnaList)
     {
         
         scoreArray[i].score = map.getSquaredDistance(path.getEndPoint(map.start));
+
         scoreArray[i].score *= scoreModulatorDistrib(generator);
         scoreArray[i].id = i;
         i++;
@@ -295,6 +298,39 @@ void PathManager::randomMovementReplace()
 }
 
 
+void PathManager::reduce()
+{
+    size_t smallestPath = pathLen;
+    for (auto &&path : dnaList)
+    {
+        //its a copy
+        point currentPos = map.start;
+        // start from the end point and go back to the start
+        for (size_t i = 0; i <pathLen; i++)
+        {
+            currentPos += path[i];
+            if(currentPos.approximatelyEqual(map.end, baseElement))
+            {
+                std::cout<<"HOLA"<<std::endl;
+                if(i+1 < smallestPath)
+                    smallestPath = i+1;
+                break;
+            }
+        }
+    }
+
+
+    for (auto &&path : dnaList)
+        path.setLength(smallestPath);
+    pathLen = smallestPath;
+
+    //update the generator for the crossing
+    crossDistrib = std::uniform_int_distribution<int>(0,pathLen);
+
+    
+}
+
+
 void PathManager::printAllPaths()
 {
     int i=0;
@@ -307,7 +343,46 @@ void PathManager::printAllPaths()
     
 }
 
+
+/*
+check the paths are converging, returns true if there is convergence
+
+*/
+bool PathManager::testIfConverge()
+{
+    
+    //calculate the sum of scores
+    float sumOfScores;
+    //it should be fast, so theres no need to compute the score in orderByScoreRandomed
+    for (size_t i = 2; i < pathNumber-2; i++)
+    {
+        sumOfScores+=map.getSquaredDistance(dnaList[i].getEndPoint(map.start));
+    }
+    
+    //if the sum is similar to the precedent sum, increment a variable, else reset it
+    //if this variable is higher that max consecutiveScores, there is convergence
+    if (lastTotalScore < sumOfScores*1.1 && lastTotalScore > sumOfScores*0.9)
+    {
+        consecutiveSimilarScores++;
+        if(consecutiveSimilarScores > maxConsecutiveScores)
+        {
+            std::cout << "convergence!!" << std::endl;  
+            return true;  
+        }
+    }
+    else
+        consecutiveSimilarScores=0;
+    
+    lastTotalScore = sumOfScores;
+    return false;
+}
+
 std::vector<Path> PathManager::getDnaList()
 {
     return dnaList;
 }
+
+size_t PathManager::getPathLength()
+ {
+     return pathLen;
+ }

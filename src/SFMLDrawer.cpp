@@ -87,7 +87,7 @@ void SFMLDrawer::drawAll()
     for (auto &&path : pathManager.getDnaList())
     {
         point lastPos = map.start;
-        for (size_t i = 0; i < pathManager.pathLen; i++)
+        for (size_t i = 0; i < pathManager.getPathLength(); i++)
         {
             sf::Vertex line[2] = 
             {

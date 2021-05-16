@@ -46,6 +46,12 @@ bool point::operator==(const point& p) const
 }
 
 
+bool point::approximatelyEqual(const point& p, const float precision)
+{
+    return p.x<x+precision && p.x>x-precision &&  p.y<y+precision && p.y>y-precision;
+}
+
+
 std::ostream& operator<<(std::ostream& os, const point& p)
 {
     return os << "(" << p.x << "," << p.y << ")"; 

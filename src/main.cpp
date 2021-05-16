@@ -24,11 +24,12 @@ int main(int argc, char* argv[])
     {
         screenSize = {1920,1080};
         mapSize = {1920,1080};
-        startPoint ={0,0}; endPoint ={1920,1080};
-        pathLen = 1000; pathNumber = 10;
+        startPoint ={0,0}; endPoint ={800,800};
+        pathLen = 3000; pathNumber = 10;
         baseElement = 5;
         lineWidth = baseElement+0.001;
         mutationChance = 4;
+        
     }else if (argc <13)
     {
         std::cout << "usage : " << argv[0] << " screenSizeX screenSizeY" 
@@ -57,7 +58,7 @@ int main(int argc, char* argv[])
 
 
     Map map(mapSize.x, mapSize.y, startPoint, endPoint, lineWidth);
-    PathManager manager(map, pathLen, pathNumber, baseElement, mutationChance);
+    PathManager manager(map, pathLen, pathNumber, baseElement, mutationChance, 300);
 
     SFMLDrawer drawer(map, manager, window);
     drawer.addRectangle(point{500,500}, 400,200);
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
 
 
     int frameNumber=0;
-    while (window.isOpen())
+    while (!manager.testIfConverge() && window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -81,21 +82,18 @@ int main(int argc, char* argv[])
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        std::cout<<"order by score" << std::endl;
+
         manager.orderByScoreRandomed();
-        std::cout<<"order by score" << std::endl;
         manager.crossing();
-        std::cout<<"order by score" << std::endl;
         manager.mutate();
 
         window.clear();
         drawer.drawAll();
         window.display();
-        std::cout << "\n\n\ndrawn frame : " << frameNumber << std::endl;
+        std::cout << "drawn frame : " << frameNumber  << " current pathLen = " << manager.getPathLength() << std::endl;
         frameNumber++;
-
-
     }
+    
 
 
 

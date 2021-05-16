@@ -4,20 +4,22 @@ SRCPATH := src
 EXEC := program
 
 SRC := $(wildcard $(SRCPATH)/*.cpp)
-OBJ := $(SRC:.c=.o)
+HEADERS := $(wildcard $(SRCPATH)/*.h)
+OBJ := $(SRC:.cpp=.o)
+
 
 all: program
 
 program: $(OBJ)
-	g++ -o $@ $^ $(FLAGS) $(SFML_LIBS) 
+	g++ -o  $@ $^ $(FLAGS) $(SFML_LIBS)
 
-%.o: %.c 
+%.o: %.cpp %.h
 	g++ -o $@ -c $< $(FLAGS)
 
 .PHONY: clean mrproper
 
 clean:
-	rm -rf *.o
+	rm -rf $(SRCPATH)/*.o
 
 mrproper: clean
 	rm -rf $(EXEC)
