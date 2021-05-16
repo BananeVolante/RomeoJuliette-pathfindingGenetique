@@ -17,6 +17,9 @@ typedef struct point
 
     bool operator==(const point& p) const;
 
+    //test if 2 points are equal, within a non inclusive error margin
+    bool approximatelyEqual(const point& p ,const float precision);
+
     // useless, but it's still interesting to say that point have <<
     friend std::ostream& operator<<(std::ostream& os, const point& p);
 

@@ -10,7 +10,7 @@
 //probably overkill and makes me repeat point's operators, 
 //but i wanted to do it anyway
 //in a case outside learning, i would use get and set instead, much cleaner
-// ignore it
+
 struct PathProxy
 {
     PathProxy(point& currentPoint, point& endPoint);
@@ -57,6 +57,7 @@ public:
     Path& operator=(const Path&);
 
     size_t getLength() const;
+    void setLength(size_t l);
     point getEndPoint(point startPoint) const;
 
     void printPath();

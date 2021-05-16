@@ -57,9 +57,9 @@ void PathManager::orderByScoreRandomed()
     for (auto &&path : dnaList)
     {
         
-        scoreArray[i].score = map.getSquaredDistance(path.getEndPoint(map.start));
-
-        scoreArray[i].score *= scoreModulatorDistrib(generator);
+//        scoreArray[i].score = map.getSquaredDistance(path.getEndPoint(map.start));
+      //  scoreArray[i].score *= scoreModulatorDistrib(generator);
+        scoreArray[i].score = computeScore(path);
         scoreArray[i].id = i;
         i++;
     }
@@ -375,6 +375,29 @@ bool PathManager::testIfConverge()
     
     lastTotalScore = sumOfScores;
     return false;
+}
+
+
+float PathManager::computeScore(Path& path)
+{
+    
+    //go from the end of the path, and find the closest point
+    point currentPos = path.getEndPoint(map.start);
+    float score = INFINITY;
+
+    for (size_t i = pathLen-1; i!=(size_t)(0-1); i--) //(0-1) for the highest size_t value
+    {
+        float tmpScore = map.getSquaredDistance(currentPos);
+        if(tmpScore == 0) // if the distance is null, it's useless to continue
+            return 0;
+        if(tmpScore < score)
+            score = tmpScore;
+        currentPos -= path[i];
+    }
+    
+    score *= scoreModulatorDistrib(generator);
+    return score;
+
 }
 
 std::vector<Path> PathManager::getDnaList()
