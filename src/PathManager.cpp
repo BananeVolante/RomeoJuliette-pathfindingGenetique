@@ -319,7 +319,6 @@ void PathManager::reduce()
         }
     }
 
-
     for (auto &&path : dnaList)
         path.setLength(smallestPath);
     pathLen = smallestPath;
@@ -399,6 +398,20 @@ float PathManager::computeScore(Path& path)
     return score;
 
 }
+
+int PathManager::findValidPath()
+{
+    for (size_t i = 0; i < pathNumber; i++)
+    {
+        if(dnaList[i].getEndPoint(map.start).approximatelyEqual(map.end, baseElement))
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 
 std::vector<Path> PathManager::getDnaList()
 {

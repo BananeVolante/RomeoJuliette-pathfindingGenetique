@@ -83,6 +83,7 @@ public:
     void orderByScoreRandomed();
     void crossing();
     void mutate();
+    void extend();
 
     /* find the fist point in all paths that reach the endpoint, and 
     reduce the path length according to its index
@@ -91,6 +92,13 @@ public:
 
     /* test if the "middle" paths are not changing a lot */
     bool testIfConverge();
+
+    /*
+    search all the paths to find one that reach the end point(taking the precision into account)
+    returns the index of the path, or -1 if there is none
+    */
+    int findValidPath();
+
 
     std::vector<Path> getDnaList();
     size_t getPathLength();
