@@ -79,6 +79,43 @@ point Path::getEndPoint(const point start) const
     return cachedEndPoint + start;
 }
 
+void Path::changeSize(size_t newSize)
+{
+    if(newSize == 0)
+        throw new std::invalid_argument("new size can't be null");
+    if(newSize == length)
+        return;
+
+
+    //recalculate the end size if the size is lower
+    if(newSize<length)
+    {
+        if(newSize<length/2) // if it's better to completely recalculate
+        {
+            cachedEndPoint = {0,0};
+            for (size_t i = 0; i < newSize; i++)
+                cachedEndPoint+=path[i];            
+        }
+        else //it's better to substract
+        {
+            for(size_t i=newSize; i<length; i++)
+                cachedEndPoint-=path[i];
+        }
+    }
+
+    path = (point*)realloc(path, newSize*sizeof(point));
+
+    //put all the new points to 0 to make sure that the end point is still valid
+    if(newSize>length)
+    {
+        for (size_t i = length; i < newSize; i++)
+            path[i] = {0,0};        
+    }
+
+    length = newSize;
+
+}
+
 
 
 

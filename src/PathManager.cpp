@@ -17,8 +17,6 @@ PathManager::~PathManager()
 
 void PathManager::fillRandomPaths()
 {
-
-
     //dnaList.clear();
     dnaList.assign(pathNumber, Path(pathLen));
     for (size_t i = 0; i < pathNumber; i++)
@@ -42,6 +40,23 @@ void PathManager::fillRandomPaths()
 
     
 }
+
+void PathManager::replacePath(size_t startIndex, Path& path)
+{
+    point currentPos = map.start;
+    point tmpPos;
+    for (size_t j = startIndex; j < pathLen; j++)
+    {
+        do
+        {
+            path[j] = getBiasedMovement(currentPos);
+            tmpPos = currentPos + path[j];
+        } while (map.isInObstacle(tmpPos));
+
+        currentPos = tmpPos;
+    }
+}
+
 
 bool PathManager::scoreComparer(scoreWithId const& lhs, scoreWithId const& rhs)
 {
@@ -409,6 +424,19 @@ int PathManager::findValidPath()
         }
     }
     return -1;
+}
+
+void PathManager::extend()
+{
+    //update path sizes and fill the new paths
+    size_t newPathLen = pathLen *= extendPercentage;
+    for(auto&& path : dnaList)
+    {
+        path.changeSize(newPathLen);
+        replacePath(pathLen, path);
+    }
+    //reset the counter to check if there is a convergence
+    consecutiveSimilarScores = 0;
 }
 
 

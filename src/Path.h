@@ -60,6 +60,16 @@ public:
     void setLength(size_t l);
     point getEndPoint(point startPoint) const;
 
+
+    /*
+    change the size of the path using reallocate
+    newSize can't be null
+    if the size of the path is increased, fill the added points with {0,0}
+    make sure that the endPoint is still valid
+    //should be OK
+    */
+    void changeSize(size_t newSize);
+
     void printPath();
 
     //must be multiplied by the base distance

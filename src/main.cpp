@@ -8,11 +8,15 @@
 #include <unistd.h>
 #include <sstream>
 
+#define USE_REDUCE 0
+#define EXTEND_ON_CONVERGE 1
+
+
 
 int main(int argc, char* argv[])
 {
 
-    
+
     point screenSize;
     point mapSize;
     point startPoint; point endPoint;
@@ -52,13 +56,13 @@ int main(int argc, char* argv[])
     }
     
 
-
+    
 
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Genetic pathfinding!");
 
 
     Map map(mapSize.x, mapSize.y, startPoint, endPoint, lineWidth);
-    PathManager manager(map, pathLen, pathNumber, baseElement, mutationChance, 300);
+    PathManager manager(map, pathLen, pathNumber, baseElement, mutationChance, 100);
 
     SFMLDrawer drawer(map, manager, window);
     drawer.addRectangle(point{500,500}, 400,200);
@@ -74,7 +78,8 @@ int main(int argc, char* argv[])
 
 
     int frameNumber=0;
-    while (!manager.testIfConverge() && window.isOpen())
+    bool stop = false;
+    while (!stop && window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -86,6 +91,26 @@ int main(int argc, char* argv[])
         manager.orderByScoreRandomed();
         manager.crossing();
         manager.mutate();
+
+        bool converge = manager.testIfConverge();
+        if(converge)
+        {
+            #if EXTEND_ON_CONVERGE == 1
+                if(manager.findValidPath() == -1) // if the path isn't good for now, extend it
+                    manager.extend();
+                else 
+                    stop = true;
+            #else 
+                stop = true; // stop if the algorithm converge
+            #endif
+        }
+
+        #if USE_REDUCE == 1
+        manager.reduce();
+        #endif
+
+        
+        
 
         window.clear();
         drawer.drawAll();

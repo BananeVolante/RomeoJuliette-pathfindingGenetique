@@ -46,6 +46,9 @@ private:
     //when consecutiveSimilarScores > maxConsecutiveScores, it means that our paths converged
     int maxConsecutiveScores;
 
+    //the percentage by which the path size will increase on extend
+    float extendPercentage = 1.2;
+
 
     //here to keep old id after sorting
     struct scoreWithId
@@ -65,6 +68,10 @@ private:
     point getRandomMovementNoReplacement();
     void randomMovementReplace();
 
+    //complete the path with random directions while avoiding collision
+    //startIndex allows you to keep the beginning of the path
+    void replacePath(size_t startIndex, Path& path);
+
     std::default_random_engine generator;
     std::uniform_int_distribution<int> directionDistrib{1,4};
     std::uniform_real_distribution<float> scoreModulatorDistrib{0.95, 1.05};
@@ -83,6 +90,11 @@ public:
     void orderByScoreRandomed();
     void crossing();
     void mutate();
+    /*
+    extend the length of all paths by extend percentage
+    fill the rest of these paths with new random valid movements
+    reset the convergence counter
+    */
     void extend();
 
     /* find the fist point in all paths that reach the endpoint, and 
@@ -96,6 +108,7 @@ public:
     /*
     search all the paths to find one that reach the end point(taking the precision into account)
     returns the index of the path, or -1 if there is none
+    seems OK
     */
     int findValidPath();
 
