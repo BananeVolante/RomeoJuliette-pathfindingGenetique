@@ -19,26 +19,10 @@ void PathManager::fillRandomPaths()
 {
     //dnaList.clear();
     dnaList.assign(pathNumber, Path(pathLen));
-    for (size_t i = 0; i < pathNumber; i++)
+    for(auto&& path : dnaList)
     {
-        Path& currentPath = dnaList.at(i);
-
-        point currentPos = map.start;
-        point tmpPos;
-        for (size_t j = 0; j < pathLen; j++)
-        {
-            do
-            {
-                currentPath[j] = getBiasedMovement(currentPos);
-                tmpPos = currentPos + currentPath[j];
-            } while (map.isInObstacle(tmpPos));
-
-            currentPos = tmpPos;
-        }
-        
-    }
-
-    
+        replacePath(0,path);
+    }    
 }
 
 void PathManager::replacePath(size_t startIndex, Path& path)
