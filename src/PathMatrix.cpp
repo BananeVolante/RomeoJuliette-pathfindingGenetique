@@ -1,4 +1,5 @@
 #include "PathMatrix.h"
+#include <iostream>
 
 PathMatrix::PathMatrix(point mapSize, size_t pathNumberP) : pathNumber(pathNumberP), matrix(std::vector<bool>(mapSize.x * mapSize.y * pathNumber, false))
 {

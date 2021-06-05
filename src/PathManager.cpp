@@ -35,6 +35,13 @@ void PathManager::replacePath(size_t startIndex, Path& path)
         {
             path[j] = getBiasedMovement(currentPos);
             tmpPos = currentPos + path[j];
+            if(j>0)
+                std::cout << tmpPos << currentPos << currentPos -path[j-1] << std::endl;
+            if( j >0 && tmpPos.approximatelyEqual(currentPos - path[j-1], 0.1))
+            {
+                std::cout << "skipped" << std::endl;
+                continue;
+            }
         } while (map.isInObstacle(tmpPos));
 
         currentPos = tmpPos;
@@ -218,7 +225,7 @@ point PathManager::getBiasedMovement(point p)
 {
     //https://stackoverflow.com/a/1761646
     
-    int weights[4] = {1};
+    int weights[4] = {1,1,1,1};
     int sumOfWeight = 4; //4*1
 
 
@@ -244,7 +251,7 @@ point PathManager::getBiasedMovement(point p)
         sumOfWeight++;
     }
     
-    std::uniform_int_distribution<int> biasedDistrib(0, sumOfWeight);
+    std::uniform_int_distribution<int> biasedDistrib(0, sumOfWeight-1);
     int random = biasedDistrib(generator);
     int movementID = 0;
 
@@ -264,13 +271,18 @@ point PathManager::getBiasedMovement(point p)
         return Path::LEFT*baseElement;
         break;
     case 1:
+
         return Path::RIGHT*baseElement;
         break;
     case 2:
         return Path::UP*baseElement;
         break;
-    default:
+    case 3:
         return Path::DOWN*baseElement;
+        break;
+    default : 
+        throw new std::runtime_error("weird outcome of getBiasedMovemet");
+        return Path::NONE;
         break;
     }
     

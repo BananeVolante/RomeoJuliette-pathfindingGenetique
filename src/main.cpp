@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "PathManager.h"
 #include "Path.h"
+#include "Test.h"
 
 #include <unistd.h>
 #include <sstream>
@@ -13,9 +14,15 @@
 
 
 
-int main(int argc, char* argv[])
+int testMain(int argc, char* argv[])
 {
+    Test t;
+    std::cout << t.testPathMatrix() << std::endl;
+    return 0;
+}
 
+int normalMain(int argc, char* argv[])
+{
 
     point screenSize;
     point mapSize;
@@ -125,3 +132,12 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+
+int main(int argc, char* argv[])
+{
+    #ifdef TESTING
+        return testMain(argc, argv);
+    #else
+        return normalMain(argc, argv);
+    #endif
+}
