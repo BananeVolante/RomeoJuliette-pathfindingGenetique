@@ -14,7 +14,7 @@
 
 
 
-int testMain(int argc, char* argv[])
+int testMain()
 {
     Test t;
     std::cout << t.testPathMatrix() << std::endl;
@@ -136,7 +136,7 @@ int normalMain(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
     #ifdef TESTING
-        return testMain(argc, argv);
+        return testMain();
     #else
         return normalMain(argc, argv);
     #endif
