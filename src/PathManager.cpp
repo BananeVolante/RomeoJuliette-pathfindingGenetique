@@ -37,14 +37,8 @@ void PathManager::replacePath(size_t startIndex, Path& path, size_t pathId)
             tmpPos = currentPos + path[j];
             if(j>0)
                 std::cout << tmpPos << currentPos << currentPos -path[j-1] << std::endl;
-            //if the current path already passed by the tmpPos, if accessing an element outside of the matrix, do as if it was already taken
-            if( j>0 && pathMatrix.getElementDefault(tmpPos.x, tmpPos.y, pathId, true) )
-            //if( j >0 && tmpPos.approximatelyEqual(currentPos - path[j-1], 0.1))
-            {
-                std::cout << "skipped" << std::endl;
-                continue;
-            }
-        } while (map.isInObstacle(tmpPos));
+        //if the current path already passed by the tmpPos, if accessing an element outside of the matrix, do as if it was already taken
+        } while (map.isInObstacle(tmpPos) || pathMatrix.getElementDefault(tmpPos.x, tmpPos.y, pathId, true));
 
         pathMatrix.setElement(currentPos.x, currentPos.y, pathId, false);
         currentPos = tmpPos;
