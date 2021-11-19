@@ -1,0 +1,5 @@
+*.o
+program
+dump
+test
+.vscode
