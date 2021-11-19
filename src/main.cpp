@@ -36,7 +36,7 @@ int normalMain(int argc, char* argv[])
         screenSize = {1920,1080};
         mapSize = {1920,1080};
         startPoint ={0,0}; endPoint ={800,800};
-        pathLen = 3000; pathNumber = 10;
+        pathLen = 300; pathNumber = 10;
         baseElement = 5;
         lineWidth = baseElement+0.001;
         mutationChance = 4;

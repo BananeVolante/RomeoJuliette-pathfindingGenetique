@@ -5,7 +5,7 @@
 
 PathManager::PathManager(Map &mapP, size_t pathLenP, size_t pathNumberP, float baseElementP, float mutationChanceP, int maxConsecutiveScoresP)
 :    pathNumber(pathNumberP),pathLen(pathLenP), baseElement(baseElementP), mutationChance(mutationChanceP),
-    map(mapP), maxConsecutiveScores(maxConsecutiveScoresP), generator(time(NULL)),  crossDistrib(0,pathLen)
+    map(mapP), pathMatrix({map.mapHitbox.height, map.mapHitbox.width}, pathNumberP), maxConsecutiveScores(maxConsecutiveScoresP), generator(time(NULL)),  crossDistrib(0,pathLen)
 {
 }
 
@@ -19,13 +19,13 @@ void PathManager::fillRandomPaths()
 {
     //dnaList.clear();
     dnaList.assign(pathNumber, Path(pathLen));
-    for(auto&& path : dnaList)
+    for (size_t i = 0; i < pathNumber; i++)
     {
-        replacePath(0,path);
-    }    
+        replacePath(0, dnaList[i], i);
+    }
 }
 
-void PathManager::replacePath(size_t startIndex, Path& path)
+void PathManager::replacePath(size_t startIndex, Path& path, size_t pathId)
 {
     point currentPos = map.start;
     point tmpPos;
@@ -44,7 +44,9 @@ void PathManager::replacePath(size_t startIndex, Path& path)
             }
         } while (map.isInObstacle(tmpPos));
 
+        pathMatrix.setElement(currentPos.x, currentPos.y, pathId, false);
         currentPos = tmpPos;
+        pathMatrix.setElement(currentPos.x, currentPos.y, pathId, true);
     }
 }
 
@@ -429,7 +431,7 @@ void PathManager::extend()
     for(auto&& path : dnaList)
     {
         path.changeSize(newPathLen);
-        replacePath(pathLen, path);
+        replacePath(pathLen, path, 0);
     }
     //reset the counter to check if there is a convergence
     consecutiveSimilarScores = 0;

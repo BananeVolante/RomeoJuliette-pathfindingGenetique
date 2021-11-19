@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Path.h"
 #include "cassert"
+#include "PathMatrix.h"
 
 
 
@@ -37,6 +38,8 @@ private:
 
     //vector of arrays
     std::vector<Path> dnaList;
+    PathMatrix pathMatrix;
+
 
 
     // used to determine if there is a convergence
@@ -49,7 +52,7 @@ private:
     //the percentage by which the path size will increase on extend
     float extendPercentage = 1.2;
 
-
+    
     //here to keep old id after sorting
     struct scoreWithId
     {
@@ -70,7 +73,8 @@ private:
 
     //complete the path with random directions while avoiding collision
     //startIndex allows you to keep the beginning of the path
-    void replacePath(size_t startIndex, Path& path);
+    //need the pathId for the matrix
+    void replacePath(size_t startIndex, Path& path, size_t pathId);
 
     std::default_random_engine generator;
     std::uniform_int_distribution<int> directionDistrib{1,4};
