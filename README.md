@@ -1,6 +1,10 @@
 # POO2RomeoJuliette
 
+A pathfinding algorithm using a genetic algorithm. Initially a school project.
+
 ## How to use
+
+Requires SFML(libsfml-dev package on debian)
 
 ./program
 start with default parameters : 
