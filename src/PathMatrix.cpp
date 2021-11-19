@@ -22,6 +22,12 @@ bool PathMatrix::getElement(size_t x, size_t y, size_t pathId)
     //return (matrix[ (x*matrixSizeX +y) * elementSize + pathId/BITS_IN_BYTES] >> pathId%BITS_IN_BYTES) & ONE;
 }
 
+bool PathMatrix::getElementDefault(size_t x, size_t y, size_t pathId, bool defaultValue)
+{
+    if(x > matrixSizeX || y > matrixSizeY || pathId > pathNumber-1) return defaultValue;
+    return matrix[matrixSizeX * matrixSizeY * pathId + x*matrixSizeX + y];
+}
+
 void PathMatrix::setElement(size_t x, size_t y, size_t pathId, bool value)
 {
     if(x > matrixSizeX || y > matrixSizeY ) throw new std::invalid_argument("trying to access elements outside of the matrix");

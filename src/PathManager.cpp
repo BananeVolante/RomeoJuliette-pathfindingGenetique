@@ -37,7 +37,9 @@ void PathManager::replacePath(size_t startIndex, Path& path, size_t pathId)
             tmpPos = currentPos + path[j];
             if(j>0)
                 std::cout << tmpPos << currentPos << currentPos -path[j-1] << std::endl;
-            if( j >0 && tmpPos.approximatelyEqual(currentPos - path[j-1], 0.1))
+            //if the current path already passed by the tmpPos, if accessing an element outside of the matrix, do as if it was already taken
+            if( j>0 && pathMatrix.getElementDefault(tmpPos.x, tmpPos.y, pathId, true) )
+            //if( j >0 && tmpPos.approximatelyEqual(currentPos - path[j-1], 0.1))
             {
                 std::cout << "skipped" << std::endl;
                 continue;
@@ -159,7 +161,7 @@ void PathManager::mutate()
         {    
             if(mutationDistrib(generator) < mutationChance)
             {
-                // here to replace the elements that had been picked before
+                // here to replace the elements that have been picked before
                 randomMovementReplace();
                 do
                 {

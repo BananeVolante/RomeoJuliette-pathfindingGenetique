@@ -20,6 +20,8 @@ public:
     ~PathMatrix();
 
     bool getElement(size_t x, size_t y, size_t pathId);
+    //get element, but returns a default value when accessing elements outside of the matrix
+    bool getElementDefault(size_t x, size_t y, size_t pathId, bool defaultValue);
     void setElement(size_t x, size_t y, size_t pathId, bool value);
 };
 
