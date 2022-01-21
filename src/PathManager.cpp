@@ -412,10 +412,14 @@ int PathManager::findValidPath()
 {
     for (size_t i = 0; i < pathNumber; i++)
     {
-        if(dnaList[i].getEndPoint(map.start).approximatelyEqual(map.end, baseElement))
+        if(dnaList[i].findIfInPath(map.start, map.end, baseElement) != -1)
         {
             return i;
         }
+        /*if(dnaList[i].getEndPoint(map.start).approximatelyEqual(map.end, baseElement))
+        {
+            return i;
+        }*/
     }
     return -1;
 }

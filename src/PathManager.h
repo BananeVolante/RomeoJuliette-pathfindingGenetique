@@ -53,6 +53,8 @@ private:
     float extendPercentage = 1.2;
 
     
+
+    
     //here to keep old id after sorting
     struct scoreWithId
     {

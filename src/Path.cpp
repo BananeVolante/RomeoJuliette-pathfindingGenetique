@@ -116,6 +116,20 @@ void Path::changeSize(size_t newSize)
 
 }
 
+int Path::findIfInPath(point startPoint, point pointToSearch, float precision) const
+{
+    if(startPoint.approximatelyEqual(pointToSearch, precision))
+        return 0;
+    for(size_t i = 0; i < length ;i++)
+    {
+        startPoint += path[i];
+        if(startPoint.approximatelyEqual(pointToSearch, precision))
+            return i+1;
+    }
+    return -1;
+    
+}
+
 
 
 

@@ -60,6 +60,9 @@ public:
     void setLength(size_t l);
     point getEndPoint(point startPoint) const;
 
+    //recherche si le point demandé se trouve dans le path, retourne l'index trouvé +1, -1 si rien trouvé
+    int findIfInPath(point startPoint, point pointToSearch, float precision) const;
+
 
     /*
     change the size of the path using reallocate
